@@ -60,7 +60,7 @@ Los controladores JavaFX se encargan de la interacción con el usuario y el admi
 ---
 
 ### Patrones de apoyo
-Singleton, Builder, Factory, Strategy, Decorator, Observer, Adapter, Facade y Template Method, lo que encaja bien con las necesidades del dominio.
+Singleton, Builder, Factory, Strategy, Decorator, Observer, Adapter, Facade y State, lo que encaja bien con las necesidades del dominio.
 
 ---
 
