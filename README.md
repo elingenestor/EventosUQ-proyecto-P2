@@ -1,4 +1,9 @@
-integrantes del grupo del proyecto
-- Nestor Alejandro Rojas González
-- Kevin Santiago Plaza Lopez
-- Luisa Fernanda Salazar Gonzalez
+# Plataforma de Gestión de Eventos y Venta de Entradas
+
+Sistema desarrollado en Java y JavaFX para la gestión de eventos, selección de zonas y asientos, compra de entradas y generación de reportes operativos.
+
+## Integrantes
+
+- Fernanda
+- Néstor
+- Santiago
