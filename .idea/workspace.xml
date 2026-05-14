@@ -5,16 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d2ba0303-e2f1-4d97-9707-69290d23fecb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/CategoriaEvento.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoAsiento.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoCompra.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoEntrada.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoEvento.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/MetodoPagoSimulado.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/TipoIncidencia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/TipoServicio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/db-forest-config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Interfaces/ICancelable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Interfaces/IComprable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Interfaces/IExportable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Interfaces/IObservable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Interfaces/IObservador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Entidades/Usuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/MetodoPago.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/database/data_1.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/database/schema.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Evento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Evento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/CategoriaEvento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/CategoriaEvento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoAsiento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/EstadoAsiento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/EstadoCompra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoEntrada.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/EstadoEntrada.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoEvento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/EstadoEvento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/MetodoPagoSimulado.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/TipoIncidencia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/TipoIncidencia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/TipoServicio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Enums/TipoServicio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Evento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Entidades/Evento.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +40,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
+        <option value="Class" />
         <option value="Enum" />
       </list>
     </option>
@@ -37,12 +55,12 @@
     &quot;assignee&quot;: &quot;elingenestor&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/elingenestor/EventosUQ-proyecto-P2.git",
-    "accountId": "e826266d-00f5-4d52-a42d-de86f59b78dc"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/elingenestor/EventosUQ-proyecto-P2.git&quot;,
+    &quot;accountId&quot;: &quot;e826266d-00f5-4d52-a42d-de86f59b78dc&quot;
   }
-}]]></component>
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -63,18 +81,35 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "I do mind",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/nesticor/Documentos/PROGRAMACION 2/PROYECTO",
+    "last_opened_file_path": "/home/nesticor/Documentos/PROGRAMACION 2/Proyecto-P2",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.uniquindio.proyectop2" />
+    </key>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="d2ba0303-e2f1-4d97-9707-69290d23fecb" name="Changes" comment="" />
