@@ -7,7 +7,7 @@ public class GestorReportes {
 
     private GestorReportes (){}
 
-    private static synchronized GestorReportes getInstance() {
+    public static synchronized GestorReportes getInstance() {
         if (instance == null){
             instance = new GestorReportes();
         }
@@ -19,12 +19,12 @@ public class GestorReportes {
         System.out.println("Generando reporte de ventas CSV ...");
     }
 
-    public void GenerarReporteOcupacionPDF(int idEvento, String rutaArchivo){
+    public void generarReporteOcupacionPDF(String idEvento, String rutaArchivo){
         //implementacion con PDFBox
         System.out.println("Generando reporte ocupacion PDF...");
     }
 
-    public void GenerarReporteIngresosServiciosCSV(LocalDate inicio, LocalDate fin, String rutaArchivo){
+    public void generarReporteIngresosServiciosCSV(LocalDate inicio, LocalDate fin, String rutaArchivo){
         System.out.println("Generando reporte de ingresos de servicios CSV...");
     }
 }
