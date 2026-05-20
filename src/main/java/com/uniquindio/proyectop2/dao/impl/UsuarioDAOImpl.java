@@ -1,7 +1,7 @@
 package com.uniquindio.proyectop2.dao.impl;
 
-import com.uniquindio.proyectop2.dao.interfaces.UsuarioDAO;
 import com.uniquindio.proyectop2.Model.Usuario;
+import com.uniquindio.proyectop2.dao.interfaces.UsuarioDAO;
 import com.uniquindio.proyectop2.patterns.Creational.singleton.ConexionBD;
 
 import java.sql.*;
@@ -10,36 +10,45 @@ import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
 
-
     @Override
     public Usuario findById(String id) {
         String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, Integer.parseInt(id));
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapResultSetToUsuario(rs);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToUsuario(rs);
+                }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
     public Usuario findByEmail(String email) {
         String sql = "SELECT * FROM usuario WHERE email = ?";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapResultSetToUsuario(rs);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToUsuario(rs);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -47,31 +56,40 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     public List<Usuario> findAll() {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuario";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 usuarios.add(mapResultSetToUsuario(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return usuarios;
     }
 
     @Override
     public void save(Usuario usuario) {
-        String sql = "INSERT INTO usuario (nombre_completo, email, telefono, password) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario (nombre_completo, email, telefono, password, es_admin) VALUES (?, ?, ?, ?, ?)";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setString(1, usuario.getNombreCompleto());
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getTelefono());
             ps.setString(4, usuario.getPassword());
+            ps.setBoolean(5, usuario.isAdmin());
+
             ps.executeUpdate();
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                usuario.setIdUsuario(String.valueOf(generatedKeys.getInt(1)));
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    usuario.setIdUsuario(String.valueOf(generatedKeys.getInt(1)));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,29 +98,34 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void update(Usuario usuario) {
-        String sql = "UPDATE usuario SET nombre_completo = ?, email = ?, telefono = ?, password = ? WHERE id_usuario = ?";
+        String sql = "UPDATE usuario SET nombre_completo = ?, email = ?, telefono = ?, password = ?, es_admin = ? WHERE id_usuario = ?";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, usuario.getNombreCompleto());
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getTelefono());
             ps.setString(4, usuario.getPassword());
-            ps.setInt(5, Integer.parseInt(usuario.getIdUsuario()));
+            ps.setBoolean(5, usuario.isAdmin());
+            ps.setInt(6, Integer.parseInt(usuario.getIdUsuario()));
+
             ps.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
         }
     }
 
-
     @Override
     public void delete(String id) {
         String sql = "DELETE FROM usuario WHERE id_usuario = ?";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, Integer.parseInt(id));
             ps.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
         }
     }
@@ -110,16 +133,21 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public boolean existeEmail(String email) {
         String sql = "SELECT COUNT(*) FROM usuario WHERE email = ?";
+
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -130,7 +158,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         usuario.setEmail(rs.getString("email"));
         usuario.setTelefono(rs.getString("telefono"));
         usuario.setPassword(rs.getString("password"));
+        usuario.setAdmin(rs.getBoolean("es_admin"));
         return usuario;
     }
-
 }

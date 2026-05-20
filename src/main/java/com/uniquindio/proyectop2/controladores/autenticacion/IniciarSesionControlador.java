@@ -4,6 +4,7 @@ import com.uniquindio.proyectop2.Model.Usuario;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.impl.UsuarioServiceImpl;
 import com.uniquindio.proyectop2.service.interfaces.UsuarioService;
+import com.uniquindio.proyectop2.util.SesionActual;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,14 +40,22 @@ public class IniciarSesionControlador {
         }
 
         try {
-            // Buscamos el usuario en el servicio
+            // 1. Autenticamos el usuario con tu servicio robusto
             Usuario usuario = usuarioService.login(correo, contrasena);
 
-            // Saltamos de ventana pasándole el usuario manualmente (Sin SesionUsuario)
-            abrirVentanaPrincipal(usuario);
+            // 2. Encendemos tu nuevo Singleton seguro y Thread-Safe
+            SesionActual.getInstance().setUsuarioActual(usuario);
+
+            // 3. Ruteo inteligente por Roles usando la nueva variable 'admin'
+            if (usuario.isAdmin()) {
+                // Si es Admin, lo mandamos a la vista de administración
+                abrirVentana("/com/uniquindio/proyectop2/vistas/administrador/panel_administrador.fxml", "Panel Administrador - Eventos UQ");
+            } else {
+                // Si es Cliente común, lo mandamos a tu ventana principal unificada
+                abrirVentana("/com/uniquindio/proyectop2/vistas/principal/ventana_principal.fxml", "Eventos UQ - Panel Principal");
+            }
 
         } catch (Exception e) {
-            // Manejo de errores robusto del segundo código para evitar alertas vacías
             String mensaje = e.getMessage();
             if (mensaje == null || mensaje.isBlank()) {
                 mensaje = e.toString();
@@ -55,28 +64,34 @@ public class IniciarSesionControlador {
         }
     }
 
-
     @FXML
     private void irARegistro() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/autenticacion/registrarse.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) txtCorreo.getScene().getWindow();
-            stage.setScene(new Scene(root, 980, 620));
-            stage.setTitle("Registro - Eventos UQ");
+            abrirVentana("/com/uniquindio/proyectop2/vistas/autenticacion/registrarse.fxml", "Registro - Eventos UQ");
         } catch (IOException e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir la pantalla de registro.");
         }
     }
 
-    private void abrirVentanaPrincipal(Usuario usuario) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/principal/ventana_principal.fxml"));
+    /**
+     * Método de utilidad interno para cambiar de ventana limpiamente sin repetir código largo
+     */
+    private void abrirVentana(String rutaFXML, String titulo) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
         Parent root = loader.load();
-        com.uniquindio.proyectop2.controladores.principal.VentanaPrincipalControlador controlador = loader.getController();
-        controlador.inicializar(usuario);
+
+        // Si la ventana de destino requiere inicialización manual (como la principal que armamos),
+        // le pasamos el usuario. Si es la de admin, el Singleton se encargará de darle los datos allá.
+        Object controladorDestino = loader.getController();
+        if (controladorDestino instanceof com.uniquindio.proyectop2.controladores.principal.VentanaPrincipalControlador) {
+            Usuario usuarioLogueado = SesionActual.getInstance().getUsuarioActual();
+            ((com.uniquindio.proyectop2.controladores.principal.VentanaPrincipalControlador) controladorDestino).inicializar(usuarioLogueado);
+        }
+
         Stage stage = (Stage) txtCorreo.getScene().getWindow();
-        stage.setScene(new Scene(root, 1100, 700));
-        stage.setTitle("Eventos UQ - Panel principal");
+        stage.setScene(new Scene(root));
+        stage.setTitle(titulo);
+        stage.centerOnScreen(); // Mantiene la aplicación centrada estéticamente en el monitor
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {

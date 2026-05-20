@@ -6,18 +6,20 @@ import java.util.List;
 public class Usuario {
     private String idUsuario;
     private String nombreCompleto;
-    private String email;   //Debe ser unico
+    private String email;
     private String password;
     private String telefono;
+    private boolean admin;
     private List<MetodoPago> metodosPago;
     private List<Compra> compras;
 
-    public Usuario (){
+    public Usuario() {
         this.metodosPago = new ArrayList<>();
         this.compras = new ArrayList<>();
     }
 
-    public Usuario (String idUsuario, String nombreCompleto, String email, String password, String telefono){
+    public Usuario(String idUsuario, String nombreCompleto, String email, String password, String telefono) {
+        this();
         this.idUsuario = idUsuario;
         this.nombreCompleto = nombreCompleto;
         this.email = email;
@@ -25,7 +27,10 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    //Getters y Setters
+    public Usuario(String idUsuario, String nombreCompleto, String email, String password, String telefono, boolean admin) {
+        this(idUsuario, nombreCompleto, email, password, telefono);
+        this.admin = admin;
+    }
 
     public String getIdUsuario() {
         return idUsuario;
@@ -43,20 +48,20 @@ public class Usuario {
         this.nombreCompleto = nombreCompleto;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getTelefono() {
@@ -67,12 +72,12 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public List<Compra> getCompras() {
-        return compras;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setCompras(List<Compra> compras) {
-        this.compras = compras;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public List<MetodoPago> getMetodosPago() {
@@ -81,6 +86,14 @@ public class Usuario {
 
     public void setMetodosPago(List<MetodoPago> metodosPago) {
         this.metodosPago = metodosPago;
+    }
+
+    public List<Compra> getCompras() {
+        return compras;
+    }
+
+    public void setCompras(List<Compra> compras) {
+        this.compras = compras;
     }
 
     public void agregarMetodoPago(MetodoPago metodo) {

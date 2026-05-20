@@ -3,7 +3,7 @@ package com.uniquindio.proyectop2.controladores.usuario;
 import com.uniquindio.proyectop2.Enums.MetodosPago;
 import com.uniquindio.proyectop2.Model.MetodoPago;
 import com.uniquindio.proyectop2.Model.Usuario;
-import com.uniquindio.proyectop2.controladores.util.SesionUsuario;
+import com.uniquindio.proyectop2.util.SesionActual;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.impl.UsuarioServiceImpl;
 import com.uniquindio.proyectop2.service.interfaces.UsuarioService;
@@ -40,7 +40,8 @@ public class MetodosPagoControlador {
 
     @FXML
     private void initialize() {
-        usuarioActual = SesionUsuario.getUsuarioActual();
+        // 👇 CORREGIDO: Usamos tu nuevo Singleton seguro
+        usuarioActual = SesionActual.getInstance().getUsuarioActual();
 
         colId.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("idMetodoPago"));
         colTipo.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("tipo"));
@@ -141,7 +142,8 @@ public class MetodosPagoControlador {
 
     public static void abrirVentana(Usuario usuario) {
         try {
-            SesionUsuario.setUsuarioActual(usuario);
+            // 👇 CORREGIDO: Usamos tu nuevo Singleton seguro para mantener la ventana sincronizada
+            SesionActual.getInstance().setUsuarioActual(usuario);
 
             FXMLLoader loader = new FXMLLoader(
                     MetodosPagoControlador.class.getResource(

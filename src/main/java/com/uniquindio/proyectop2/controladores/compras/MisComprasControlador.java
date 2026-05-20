@@ -3,19 +3,18 @@ package com.uniquindio.proyectop2.controladores.compras;
 import com.uniquindio.proyectop2.Model.Compra;
 import com.uniquindio.proyectop2.Model.Entrada;
 import com.uniquindio.proyectop2.Model.Usuario;
-import com.uniquindio.proyectop2.controladores.util.SesionUsuario;
 import com.uniquindio.proyectop2.dao.interfaces.CompraDAO;
 import com.uniquindio.proyectop2.dao.interfaces.EntradaDAO;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.impl.CompraServiceImpl;
 import com.uniquindio.proyectop2.service.interfaces.CompraService;
+import com.uniquindio.proyectop2.util.SesionActual;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 
 import java.time.format.DateTimeFormatter;
@@ -65,7 +64,6 @@ public class MisComprasControlador {
     private void initialize() {
         configurarTabla();
         configurarListaEntradas();
-        // cargarCompras();
     }
 
     private void configurarTabla() {
@@ -115,7 +113,6 @@ public class MisComprasControlador {
     }
 
     private void cargarCompras() {
-
         if (this.usuario == null) {
             lblUsuario.setText("No hay usuario autenticado");
             compras.clear();
@@ -209,10 +206,11 @@ public class MisComprasControlador {
 
             com.uniquindio.proyectop2.controladores.principal.InicioControlador controlador = loader.getController();
             if (controlador != null) {
-                controlador.setUsuario(SesionUsuario.getUsuarioActual());
+                // CORREGIDO: Se inyecta usando tu nuevo Singleton seguro SesionActual
+                controlador.setUsuario(SesionActual.getInstance().getUsuarioActual());
             }
         } catch (Exception e) {
-            mostrarAlerta("Error", mensajeError(e));
+            mostrarAlerta("Error", e.getMessage());
         }
     }
 
@@ -245,16 +243,5 @@ public class MisComprasControlador {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
-    }
-
-    private String mensajeError(Exception e) {
-        if (e == null) {
-            return "Error desconocido.";
-        }
-        String mensaje = e.getMessage();
-        if (mensaje == null || mensaje.isBlank()) {
-            mensaje = e.toString();
-        }
-        return mensaje;
     }
 }
