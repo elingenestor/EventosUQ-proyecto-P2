@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.uniquindio.proyectop2.controladores.autenticacion.IniciarSesionControlador"
+      spacing="12" alignment="CENTER" style="-fx-background-color: #f8fafc;">
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    <Label text="Eventos UQ" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+    <Label text="Inicia sesión para continuar" style="-fx-font-size: 16px;"/>
+    <TextField fx:id="txtCorreo" promptText="Correo electrónico" maxWidth="320"/>
+    <PasswordField fx:id="txtContrasena" promptText="Contraseña" maxWidth="320"/>
+    <Button text="Ingresar" onAction="#iniciarSesion" maxWidth="320" prefWidth="320"/>
+    <Button text="Registrarme" onAction="#irARegistro" maxWidth="320" prefWidth="320"/>
+</VBox>

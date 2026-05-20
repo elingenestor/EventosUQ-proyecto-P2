@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Compra implements ComponenteCompra,Observable {
+public class Compra implements ComponenteCompra, Observable {
     private String idCompra;
     private LocalDateTime fechaCreacion;
     private double total;
@@ -29,14 +29,11 @@ public class Compra implements ComponenteCompra,Observable {
         this.total = 0.0;
     }
 
-    // Getters y setter
-
-
     public String getIdCompra() {
         return idCompra;
     }
 
-    public void setIdCompra(String idCOmpra) {
+    public void setIdCompra(String idCompra) {
         this.idCompra = idCompra;
     }
 
@@ -106,12 +103,12 @@ public class Compra implements ComponenteCompra,Observable {
         }
         return costo;
     }
-@Override
+
+    @Override
     public String getDescripcion(){
-        return "Compra #" + idCompra + " - " + evento.getNombre();
+        return "Compra #" + idCompra + " - " + (evento != null ? evento.getNombre() : "Sin evento");
     }
 
-    //Observer
     @Override
     public void agregarObserver(Observer observer){
         observers.add(observer);
@@ -121,8 +118,6 @@ public class Compra implements ComponenteCompra,Observable {
     public void removerObserver(Observer observer){
         observers.remove(observer);
     }
-
-
 
     @Override
     public void notificarObserver(){

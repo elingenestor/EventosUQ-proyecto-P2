@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.uniquindio.proyectop2.controladores.compras.MisComprasControlador"
+            style="-fx-background-color: #f8fafc;">
+
+    <top>
+        <VBox spacing="8" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <Label text="Mis compras" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label text="Revisa el historial de tus compras, sus entradas y su estado actual." />
+            <Separator/>
+            <Label text="Usuario actual:" />
+            <Label fx:id="lblUsuario" text="-" style="-fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="16" style="-fx-background-color: transparent;">
+            <VBox spacing="10" prefWidth="620" style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                <Label text="Compras registradas" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <TableView fx:id="tblCompras" prefHeight="430">
+                    <columns>
+                        <TableColumn fx:id="colIdCompra" text="ID" prefWidth="90"/>
+                        <TableColumn fx:id="colEvento" text="Evento" prefWidth="170"/>
+                        <TableColumn fx:id="colFecha" text="Fecha" prefWidth="150"/>
+                        <TableColumn fx:id="colTotal" text="Total" prefWidth="90"/>
+                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="110"/>
+                        <TableColumn fx:id="colMetodoPago" text="Método" prefWidth="130"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <VBox spacing="10" prefWidth="320" style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                <Label text="Detalle de la compra" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <GridPane hgap="10" vgap="8">
+                    <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblIdCompra" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="Evento:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblEvento" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Fecha:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblFecha" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Label text="Total:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblTotal" text="0.00" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    <Label text="Estado:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblEstado" text="-" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    <Label text="Método:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblMetodoPago" text="-" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                    <Label text="Entradas:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                    <Label fx:id="lblCantidadEntradas" text="0" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                </GridPane>
+                <Label text="Entradas asociadas" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <ListView fx:id="lstEntradas" prefHeight="210"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="12" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <Button text="Actualizar" onAction="#actualizarListado"/>
+            <Button text="Cancelar compra" onAction="#cancelarCompra"/>
+        </HBox>
+    </bottom>
+</BorderPane>

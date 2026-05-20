@@ -1,147 +1,152 @@
+-- =====================================================
+-- ESQUEMA BASE DE DATOS - Eventos UQ
+-- =====================================================
+-- Este esquema está alineado con las entidades y DAOs del proyecto.
+-- Los identificadores son INT AUTO_INCREMENT para que coincidan con
+-- el uso de getGeneratedKeys() en los DAO.
+
 CREATE TABLE IF NOT EXISTS usuario (
-    id_usuario VARCHAR(100) NOT NULL,
+    id_usuario INT NOT NULL AUTO_INCREMENT,
     nombre_completo VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     password VARCHAR(255) NOT NULL,
     es_admin BOOLEAN DEFAULT FALSE,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_usuario)
 );
 
--- =====================================================
--- TABLA: metodo_pago
--- =====================================================
 CREATE TABLE IF NOT EXISTS metodo_pago (
-                                           id_metodo_pago VARCHAR(100) KEY AUTO_INCREMENT,
-                                           id_usuario VARCHAR(100) NOT NULL,
-                                           tipo VARCHAR(20) NOT NULL, -- TARJETA_CREDITO, TARJETA_DEBITO, etc.
-                                           numero VARCHAR(20) NOT NULL, -- últimos 4 dígitos o máscara
-                                           titular VARCHAR(100) NOT NULL,
-                                           FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
+    id_metodo_pago INT NOT NULL AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    titular VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_metodo_pago),
+    CONSTRAINT fk_metodo_pago_usuario
+        FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+        ON DELETE CASCADE
 );
 
--- =====================================================
--- TABLA: recinto
--- =====================================================
 CREATE TABLE IF NOT EXISTS recinto (
-                                       id_recinto VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                       nombre VARCHAR(100) NOT NULL,
-                                       direccion VARCHAR(200),
-                                       ciudad VARCHAR(100) NOT NULL
+    id_recinto INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(200),
+    ciudad VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_recinto)
 );
 
--- =====================================================
--- TABLA: zona
--- =====================================================
 CREATE TABLE IF NOT EXISTS zona (
-                                    id_zona VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                    id_recinto VARCHAR(100) NOT NULL,
-                                    nombre VARCHAR(50) NOT NULL,
-                                    capacidad INT NOT NULL,
-                                    precio_base DECIMAL(10,2) NOT NULL,
-                                    FOREIGN KEY (id_recinto) REFERENCES recinto(id_recinto) ON DELETE CASCADE
+    id_zona INT NOT NULL AUTO_INCREMENT,
+    id_recinto INT NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    capacidad INT NOT NULL,
+    precio_base DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (id_zona),
+    CONSTRAINT fk_zona_recinto
+        FOREIGN KEY (id_recinto) REFERENCES recinto(id_recinto)
+        ON DELETE CASCADE
 );
 
--- =====================================================
--- TABLA: asiento (solo para zonas numeradas)
--- =====================================================
 CREATE TABLE IF NOT EXISTS asiento (
-                                       id_asiento VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                       id_zona VARCHAR(100) NOT NULL,
-                                       fila VARCHAR(5),
-                                       numero INT NOT NULL,
-                                       estado VARCHAR(20) DEFAULT 'DISPONIBLE', -- DISPONIBLE, RESERVADO, VENDIDO, BLOQUEADO
-                                       FOREIGN KEY (id_zona) REFERENCES zona(id_zona) ON DELETE CASCADE,
-                                       UNIQUE KEY unique_asiento (id_zona, fila, numero)
+    id_asiento INT NOT NULL AUTO_INCREMENT,
+    id_zona INT NOT NULL,
+    fila VARCHAR(5),
+    numero INT NOT NULL,
+    estado VARCHAR(20) DEFAULT 'DISPONIBLE',
+    PRIMARY KEY (id_asiento),
+    CONSTRAINT fk_asiento_zona
+        FOREIGN KEY (id_zona) REFERENCES zona(id_zona)
+        ON DELETE CASCADE,
+    CONSTRAINT uk_asiento_zona_fila_numero UNIQUE (id_zona, fila, numero)
 );
 
--- =====================================================
--- TABLA: evento
--- =====================================================
 CREATE TABLE IF NOT EXISTS evento (
-                                      id_evento VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                      nombre VARCHAR(100) NOT NULL,
-                                      categoria VARCHAR(50) NOT NULL, -- CONCIERTO, TEATRO, etc.
-                                      descripcion TEXT,
-                                      ciudad VARCHAR(100) NOT NULL,
-                                      fecha_hora DATETIME NOT NULL,
-                                      estado VARCHAR(20) DEFAULT 'BORRADOR', -- BORRADOR, PUBLICADO, PAUSADO, CANCELADO, FINALIZADO
-                                      politicas_cancelacion TEXT,
-                                      id_recinto INT NOT NULL,
-                                      FOREIGN KEY (id_recinto) REFERENCES recinto(id_recinto)
+    id_evento INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    ciudad VARCHAR(100) NOT NULL,
+    fecha_hora DATETIME NOT NULL,
+    estado VARCHAR(20) DEFAULT 'BORRADOR',
+    politicas_cancelacion TEXT,
+    id_recinto INT NOT NULL,
+    PRIMARY KEY (id_evento),
+    CONSTRAINT fk_evento_recinto
+        FOREIGN KEY (id_recinto) REFERENCES recinto(id_recinto)
 );
 
--- =====================================================
--- TABLA: compra
--- =====================================================
 CREATE TABLE IF NOT EXISTS compra (
-                                      id_compra VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                      id_usuario VARCHAR(100) NOT NULL,
-                                      id_evento VARCHAR(100) NOT NULL,
-                                      fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                      total DECIMAL(10,2) NOT NULL,
-                                      estado VARCHAR(20) DEFAULT 'CREADA', -- CREADA, PAGADA, CONFIRMADA, CANCELADA, REEMBOLSADA, INCIDENCIA
-                                      id_metodo_pago INT,
-                                      FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
-                                      FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
-                                      FOREIGN KEY (id_metodo_pago) REFERENCES metodo_pago(id_metodo_pago)
+    id_compra INT NOT NULL AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_evento INT NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10,2) NOT NULL,
+    estado VARCHAR(20) DEFAULT 'CREADA',
+    id_metodo_pago INT DEFAULT NULL,
+    PRIMARY KEY (id_compra),
+    CONSTRAINT fk_compra_usuario
+        FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+    CONSTRAINT fk_compra_evento
+        FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
+    CONSTRAINT fk_compra_metodo_pago
+        FOREIGN KEY (id_metodo_pago) REFERENCES metodo_pago(id_metodo_pago)
 );
 
--- =====================================================
--- TABLA: entrada (ticket)
--- =====================================================
 CREATE TABLE IF NOT EXISTS entrada (
-                                       id_entrada VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                       id_compra VARCHAR(100) NOT NULL,
-                                       id_zona VARCHAR(100) NOT NULL,
-                                       id_asiento VARCHAR(100), -- puede ser NULL si zona no es numerada
-                                       precio_final DECIMAL(10,2) NOT NULL,
-                                       estado VARCHAR(20) DEFAULT 'ACTIVA', -- ACTIVA, USADA, ANULADA
-                                       FOREIGN KEY (id_compra) REFERENCES compra(id_compra) ON DELETE CASCADE,
-                                       FOREIGN KEY (id_zona) REFERENCES zona(id_zona),
-                                       FOREIGN KEY (id_asiento) REFERENCES asiento(id_asiento)
+    id_entrada INT NOT NULL AUTO_INCREMENT,
+    id_compra INT NOT NULL,
+    id_zona INT NOT NULL,
+    id_asiento INT DEFAULT NULL,
+    precio_final DECIMAL(10,2) NOT NULL,
+    estado VARCHAR(20) DEFAULT 'ACTIVA',
+    PRIMARY KEY (id_entrada),
+    CONSTRAINT fk_entrada_compra
+        FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_entrada_zona
+        FOREIGN KEY (id_zona) REFERENCES zona(id_zona),
+    CONSTRAINT fk_entrada_asiento
+        FOREIGN KEY (id_asiento) REFERENCES asiento(id_asiento)
 );
 
--- =====================================================
--- TABLA: servicio_adicional (catálogo)
--- =====================================================
 CREATE TABLE IF NOT EXISTS servicio_adicional (
-                                                  id_servicio VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                                  nombre VARCHAR(50) NOT NULL,
-                                                  descripcion TEXT,
-                                                  precio DECIMAL(10,2) NOT NULL,
-                                                  tipo VARCHAR(30) -- VIP, SEGURO, MERCHANDISING, etc.
+    id_servicio INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10,2) NOT NULL,
+    tipo VARCHAR(30),
+    PRIMARY KEY (id_servicio)
 );
 
--- =====================================================
--- TABLA: compra_servicio (relación muchos a muchos)
--- =====================================================
 CREATE TABLE IF NOT EXISTS compra_servicio (
-                                               id_compra VARCHAR (100) NOT NULL,
-                                               id_servicio VARCHAR(100) NOT NULL,
-                                               PRIMARY KEY (id_compra, id_servicio),
-                                               FOREIGN KEY (id_compra) REFERENCES compra(id_compra) ON DELETE CASCADE,
-                                               FOREIGN KEY (id_servicio) REFERENCES servicio_adicional(id_servicio)
+    id_compra INT NOT NULL,
+    id_servicio INT NOT NULL,
+    PRIMARY KEY (id_compra, id_servicio),
+    CONSTRAINT fk_compra_servicio_compra
+        FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_compra_servicio_servicio
+        FOREIGN KEY (id_servicio) REFERENCES servicio_adicional(id_servicio)
 );
 
--- =====================================================
--- TABLA: incidencia
--- =====================================================
 CREATE TABLE IF NOT EXISTS incidencia (
-                                          id_incidencia VARCHAR(100) PRIMARY KEY AUTO_INCREMENT,
-                                          tipo VARCHAR(30) NOT NULL, -- DOBLE_COMPRA, ERROR_PAGO, etc.
-                                          descripcion TEXT NOT NULL,
-                                          fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                          entidad_afectada VARCHAR(100), -- "Compra:123" o "Evento:45"
-                                          id_compra INT,
-                                          id_evento INT,
-                                          FOREIGN KEY (id_compra) REFERENCES compra(id_compra) ON DELETE SET NULL,
-                                          FOREIGN KEY (id_evento) REFERENCES evento(id_evento) ON DELETE SET NULL
+    id_incidencia INT NOT NULL AUTO_INCREMENT,
+    tipo VARCHAR(30) NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    entidad_afectada VARCHAR(100),
+    id_compra INT DEFAULT NULL,
+    id_evento INT DEFAULT NULL,
+    PRIMARY KEY (id_incidencia),
+    CONSTRAINT fk_incidencia_compra
+        FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
+        ON DELETE SET NULL,
+    CONSTRAINT fk_incidencia_evento
+        FOREIGN KEY (id_evento) REFERENCES evento(id_evento)
+        ON DELETE SET NULL
 );
 
--- =====================================================
--- ÍNDICES para optimizar consultas frecuentes
--- =====================================================
 CREATE INDEX idx_evento_fecha ON evento(fecha_hora);
 CREATE INDEX idx_evento_estado ON evento(estado);
 CREATE INDEX idx_evento_ciudad ON evento(ciudad);
