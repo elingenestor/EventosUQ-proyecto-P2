@@ -2,18 +2,22 @@ package com.uniquindio.proyectop2.Model;
 
 import com.uniquindio.proyectop2.Enums.EstadoCompra;
 import com.uniquindio.proyectop2.patterns.Structural.decorator.ComponenteCompra;
+import com.uniquindio.proyectop2.patterns.behavioral.state.EstadoCompraState;
+import com.uniquindio.proyectop2.patterns.behavioral.state.EstadoCreada;
 import com.uniquindio.proyectop2.patterns.behavioral.observer.Observer;
 import com.uniquindio.proyectop2.patterns.behavioral.observer.Observable;
+import com.uniquindio.proyectop2.patterns.behavioral.state.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Compra implements ComponenteCompra,Observable {
+public class Compra implements ComponenteCompra, Observable {
     private String idCompra;
     private LocalDateTime fechaCreacion;
     private double total;
     private EstadoCompra estado;
+    private EstadoCompraState estadoCompraState;
     private Usuario usuario;
     private Evento evento;
     private List<Entrada> entradas;
@@ -27,16 +31,16 @@ public class Compra implements ComponenteCompra,Observable {
         this.observers = new ArrayList<>();
         this.fechaCreacion = LocalDateTime.now();
         this.total = 0.0;
+
+        this.estado = EstadoCompra.CREADA;
+        this.estadoCompraState = new EstadoCreada();
     }
-
-    // Getters y setter
-
 
     public String getIdCompra() {
         return idCompra;
     }
 
-    public void setIdCompra(String idCOmpra) {
+    public void setIdCompra(String idCompra) {
         this.idCompra = idCompra;
     }
 
@@ -62,7 +66,7 @@ public class Compra implements ComponenteCompra,Observable {
 
     public void setEstado(EstadoCompra estado) {
         this.estado = estado;
-        notificarObserver();
+        notificarObservers();
     }
     public Usuario getUsuario(){
         return usuario;
@@ -94,40 +98,70 @@ public class Compra implements ComponenteCompra,Observable {
     public void SetMetodoPagoUsado (MetodoPago metodoPagoUsado){
         this.metodoPagoUsado = metodoPagoUsado;
     }
+    public EstadoCompraState getEstadoCompraState() { return estadoCompraState; }
 
+    public void setEstadoCompraState(EstadoCompraState nuevoEstado) {
+        this.estadoCompraState = nuevoEstado;
+        // Sincronizar el enum con el nuevo estado (opcional pero recomendado)
+        if (nuevoEstado instanceof EstadoCreada) {
+            this.estado = EstadoCompra.CREADA;
+        } else if (nuevoEstado instanceof EstadoPagada) {
+            this.estado = EstadoCompra.PAGADA;
+        } else if (nuevoEstado instanceof EstadoConfirmada) {
+            this.estado = EstadoCompra.CONFIRMADA;
+        } else if (nuevoEstado instanceof EstadoCancelada) {
+            this.estado = EstadoCompra.CANCELADA;
+        } else if (nuevoEstado instanceof EstadoReembolsada) {
+            this.estado = EstadoCompra.REEMBOLSADA;
+        }
+        notificarObservers();
+    }
     @Override
-    public double getCosto(){
+    public double getCosto() {
         double costo = 0.0;
-        for (Entrada entrada : entradas){
+        for (Entrada entrada : entradas) {
             costo += entrada.getPrecioFinal();
         }
-        for (ServicioAdicional servicio : serviciosAdicionales){
+        for (ServicioAdicional servicio : serviciosAdicionales) {
             costo += servicio.getPrecio();
         }
         return costo;
     }
-@Override
-    public String getDescripcion(){
-        return "Compra #" + idCompra + " - " + evento.getNombre();
-    }
-
-    //Observer
     @Override
-    public void agregarObserver(Observer observer){
+    public String getDescripcion() {
+        return "Compra #" + idCompra + " - " + (evento != null ? evento.getNombre() : "Sin evento");
+    }
+    @Override
+    public void agregarObserver(Observer observer) {
         observers.add(observer);
     }
 
     @Override
-    public void removerObserver(Observer observer){
+    public void removerObserver(Observer observer) {
         observers.remove(observer);
     }
 
-
-
     @Override
-    public void notificarObserver(){
-        for(Observer observer : observers){
+    public void notificarObservers() {
+        for (Observer observer : observers) {
             observer.actualizar(this, this.estado);
         }
+    }
+
+    // ========== Métodos de negocio que delegan en el estado ==========
+    public void pagar() throws Exception {
+        estadoCompraState.pagar(this);
+    }
+
+    public void cancelar() throws Exception {
+        estadoCompraState.cancelar(this);
+    }
+
+    public void confirmar() throws Exception {
+        estadoCompraState.confirmar(this);
+    }
+
+    public void reembolsar() throws Exception {
+        estadoCompraState.reembolsar(this);
     }
 }

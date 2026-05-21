@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.uniquindio.proyectop2.controladores.administrador.GestionReportesControlador"
+      spacing="14.0" style="-fx-background-color: white;">
+    <padding>
+        <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+    </padding>
+    <children>
+        <Label text="Generación de reportes" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <GridPane hgap="10.0" vgap="10.0">
+            <children>
+                <Label text="Fecha inicio" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="dpInicio" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Fecha fin" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="dpFin" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="ID evento" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtIdEvento" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Ruta archivo" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtRutaArchivo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </children>
+        </GridPane>
+        <HBox spacing="10.0">
+            <children>
+                <Button text="Ventas CSV" onAction="#generarVentasCSV"/>
+                <Button text="Ocupación PDF" onAction="#generarOcupacionPDF"/>
+                <Button text="Ingresos servicios CSV" onAction="#generarIngresosServiciosCSV"/>
+            </children>
+        </HBox>
+        <Label fx:id="lblEstado" text="Listo para generar reportes."/>
+    </children>
+</VBox>

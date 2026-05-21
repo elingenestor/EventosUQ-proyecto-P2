@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.uniquindio.proyectop2.controladores.compras.ConfirmarCompraControlador"
+            style="-fx-background-color: #f8fafc;">
+
+    <top>
+        <VBox spacing="8" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <Label text="Confirmar compra" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <GridPane hgap="12" vgap="8">
+                <Label text="Usuario:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="lblUsuario" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Evento:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="lblEvento" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Fecha:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="lblFecha" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            </GridPane>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="16" style="-fx-background-color: transparent;">
+            <VBox spacing="10" prefWidth="420" style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                <Label text="Asientos" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <TableView fx:id="tblAsientos" prefHeight="430">
+                    <columns>
+                        <TableColumn fx:id="colFila" text="Fila" prefWidth="100"/>
+                        <TableColumn fx:id="colNumero" text="Número" prefWidth="100"/>
+                        <TableColumn fx:id="colZona" text="Zona" prefWidth="160"/>
+                    </columns>
+                </TableView>
+                <Label fx:id="lblTotalBase" text="Subtotal: $0.00"/>
+            </VBox>
+
+            <VBox spacing="10" prefWidth="300" style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                <Label text="Servicios adicionales" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <ListView fx:id="lstServicios" prefHeight="300"/>
+                <Label text="Método de pago" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="cmbMetodosPago" prefWidth="260"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="12" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <Label fx:id="lblTotalFinal" text="Total estimado: $0.00" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Button text="Confirmar compra" onAction="#confirmarCompra"/>
+            <Button text="Recalcular" onAction="#recalcularTotal"/>
+            <Button text="Cerrar" onAction="#cerrarVentana"/>
+        </HBox>
+    </bottom>
+</BorderPane>

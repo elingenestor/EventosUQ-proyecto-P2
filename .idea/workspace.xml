@@ -5,18 +5,88 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d2ba0303-e2f1-4d97-9707-69290d23fecb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/factory/IncidenciaFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCancelada.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCompraI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCreada.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoPagada.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/CalculadoraPrecio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/CancelacionAntesDePagoStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/PoliticaCancelacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/PrecioBaseStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/PrecioPreventaStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Util/AlertaUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Util/CargadorVistas.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Util/DateUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Util/SessionManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/administrador/GestionRecintosControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/administrador/GestionReportesControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/administrador/GestionUsuariosControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/administrador/PanelAdministradorControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/autenticacion/IniciarSesionControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/autenticacion/RegistrarseControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/compras/ConfirmarCompraControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/compras/MisComprasControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/compras/SeleccionAsientosControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/eventos/DetalleEventoControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/eventos/FormularioEventoControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/eventos/ListaEventosControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/principal/InicioControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/principal/VentanaPrincipalControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/usuario/MetodosPagoControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/usuario/PerfilUsuarioControlador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/controladores/util/SesionActual.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/AsientoDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/CompraDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/EntradaDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/EventoDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/MetodoPagoDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/RecintoDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/ServicioAdicionalDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/ZonaDAOImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoConfirmada.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoReembolsada.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/administrador/gestion_recintos.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/administrador/gestion_reportes.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/administrador/gestion_usuarios.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/administrador/panel_administrador.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/autenticacion/iniciar_sesion.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/autenticacion/registrarse.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/compras/confirmar_compra.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/compras/mis_compras.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/compras/seleccion_asientos.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/dialogos/confirmar_dialogo.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/dialogos/error_dialogo.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/dialogos/exito_dialogo.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/eventos/detalle_evento.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/eventos/formulario_evento.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/eventos/lista_eventos.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/fragmentos/barra_lateral.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/fragmentos/barra_superior.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/fragmentos/resumen_compra.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/fragmentos/tarjeta_evento.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/principal/inicio.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/principal/ventana_principal.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/usuarios/metodos_pago.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/uniquindio/proyectop2/vistas/usuarios/perfil_usuario.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/estilos/estilos.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Enums/EstadoCompra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Administrador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Administrador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Compra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Compra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/Model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/UsuarioDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/impl/UsuarioDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/interfaces/AsientoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/interfaces/AsientoDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/interfaces/CompraDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/interfaces/CompraDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/interfaces/EntradaDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/dao/interfaces/EntradaDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/builder/EventoBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/builder/EventoBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/factory/DAOFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/factory/DAOFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/singleton/ConexionBD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Creational/singleton/ConexionBD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Structural/facade/ProcesadorCompraFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/Structural/facade/ProcesadorCompraFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCancelada.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCancelada.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCompraI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCompraState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCreada.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoCreada.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoPagada.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/state/EstadoPagada.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/CancelacionAntesDePagoStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/patterns/behavioral/strategy/CancelacionAntesDePagoStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/service/impl/CompraServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/service/impl/CompraServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/service/impl/UsuarioServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/uniquindio/proyectop2/service/impl/UsuarioServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/data_1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/data_1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +168,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.uniquindio.proyectop2.patterns.behavioral.state" />
       <recent name="com.uniquindio.proyectop2.patterns.behavioral.strategy" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -133,5 +204,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

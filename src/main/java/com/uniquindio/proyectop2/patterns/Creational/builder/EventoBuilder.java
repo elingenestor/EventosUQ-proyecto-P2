@@ -36,7 +36,7 @@ public class EventoBuilder {
         return this;
     }
 
-    public EventoBuilder setCiudad (String ciusas){
+    public EventoBuilder setCiudad (String ciudad){
         this.ciudad = ciudad;
         return this;
     }
@@ -46,8 +46,8 @@ public class EventoBuilder {
         return this;
     }
 
-    public EventoBuilder setPoliticasCancelacion (String piliticasCancelacion){
-        this.politicasCAncelacion = politicasCAncelacion;
+    public EventoBuilder setPoliticasCancelacion (String politicasCancelacion){
+        this.politicasCAncelacion = politicasCancelacion;
         return this;
     }
 

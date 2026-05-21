@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.uniquindio.proyectop2.controladores.compras.SeleccionAsientosControlador"
+            style="-fx-background-color: #f8fafc;">
+
+    <top>
+        <VBox spacing="8" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <Label text="Selección de asientos" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <GridPane hgap="12" vgap="8">
+                <Label text="Evento:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="lblEvento" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Ciudad:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="lblCiudad" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Fecha:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="lblFecha" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Recinto:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="lblRecinto" text="-" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                <Label text="Zona:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="cmbZona" prefWidth="260" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.5">
+            <items>
+                <VBox spacing="10" style="-fx-background-color: white;">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <Label text="Asientos disponibles" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <TableView fx:id="tblAsientosDisponibles" prefHeight="420">
+                        <columns>
+                            <TableColumn fx:id="colFilaDisponible" text="Fila" prefWidth="100"/>
+                            <TableColumn fx:id="colNumeroDisponible" text="Número" prefWidth="100"/>
+                            <TableColumn fx:id="colEstadoDisponible" text="Estado" prefWidth="130"/>
+                        </columns>
+                    </TableView>
+                    <Button text="Agregar asiento" onAction="#agregarAsiento"/>
+                </VBox>
+                <VBox spacing="10" style="-fx-background-color: white;">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <Label text="Asientos seleccionados" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <TableView fx:id="tblAsientosSeleccionados" prefHeight="420">
+                        <columns>
+                            <TableColumn fx:id="colFilaSeleccionado" text="Fila" prefWidth="100"/>
+                            <TableColumn fx:id="colNumeroSeleccionado" text="Número" prefWidth="100"/>
+                            <TableColumn fx:id="colZonaSeleccionado" text="Zona" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                    <Button text="Quitar asiento" onAction="#quitarAsiento"/>
+                </VBox>
+            </items>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="12" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <Label fx:id="lblTotalEstimado" text="Total estimado: $0.00" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Button text="Continuar con la compra" onAction="#continuarCompra"/>
+        </HBox>
+    </bottom>
+</BorderPane>

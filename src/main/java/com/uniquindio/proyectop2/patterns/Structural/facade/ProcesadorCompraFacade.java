@@ -25,7 +25,6 @@ public class ProcesadorCompraFacade {
         // 3. Pagar compra
         compraService.pagarCompra(compra.getIdCompra(), metodoPago);
         // 4. (Opcional) Enviar notificaciones
-        return compra;
+           return compra;
     }
 }
-

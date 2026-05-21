@@ -3,7 +3,7 @@ package com.uniquindio.proyectop2.patterns.behavioral.state;
 import com.uniquindio.proyectop2.Enums.EstadoCompra;
 import com.uniquindio.proyectop2.Model.Compra;
 
-public class EstadoPagada implements EstadoCompra{
+public class EstadoPagada implements EstadoCompraState{
     @Override
     public void pagar(Compra compra) throws Exception {
         throw new Exception("La compra ya está pagada.");
@@ -18,7 +18,7 @@ public class EstadoPagada implements EstadoCompra{
     @Override
     public void confirmar(Compra compra) throws Exception {
         compra.setEstado(EstadoCompra.CONFIRMADA);
-        compra.setEstadoCompraState(new EstadoConfirmada());
+        compra.setEstadoCompraState((EstadoCompraState) new EstadoConfirmada());
     }
 
     @Override

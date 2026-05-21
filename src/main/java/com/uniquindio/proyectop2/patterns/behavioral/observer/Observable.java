@@ -6,5 +6,5 @@ public interface Observable {
 
     void agregarObserver(Observer observer);
     void removerObserver(Observer observer);
-    void notificarObserver();
+    void notificarObservers();
 }

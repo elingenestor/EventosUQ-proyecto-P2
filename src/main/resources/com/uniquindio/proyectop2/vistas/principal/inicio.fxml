@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.uniquindio.proyectop2.controladores.principal.InicioControlador"
+      alignment="CENTER" spacing="14" style="-fx-background-color: white; -fx-padding: 40;">
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    <Label text="Panel principal" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Label fx:id="lblMensaje" text="Explora los eventos disponibles desde el panel principal." wrapText="true"/>
+</VBox>
