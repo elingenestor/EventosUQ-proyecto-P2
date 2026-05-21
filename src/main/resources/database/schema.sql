@@ -147,9 +147,10 @@ CREATE TABLE IF NOT EXISTS incidencia (
         ON DELETE SET NULL
 );
 
-CREATE INDEX idx_evento_fecha ON evento(fecha_hora);
-CREATE INDEX idx_evento_estado ON evento(estado);
-CREATE INDEX idx_evento_ciudad ON evento(ciudad);
-CREATE INDEX idx_compra_usuario ON compra(id_usuario);
-CREATE INDEX idx_compra_estado ON compra(estado);
-CREATE INDEX idx_asiento_estado ON asiento(estado);
+CREATE INDEX IF NOT EXISTS idx_evento_fecha ON evento(fecha_hora);
+CREATE INDEX IF NOT EXISTS idx_evento_estado ON evento(estado);
+CREATE INDEX IF NOT EXISTS idx_evento_ciudad ON evento(ciudad);
+CREATE INDEX IF NOT EXISTS idx_compra_usuario ON compra(id_usuario);
+CREATE INDEX IF NOT EXISTS idx_compra_estado ON compra(estado);
+CREATE INDEX IF NOT EXISTS idx_asiento_estado ON asiento(estado);
+

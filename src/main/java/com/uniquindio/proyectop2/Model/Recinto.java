@@ -61,4 +61,9 @@ public class Recinto {
     public void setZonas(List<Zona> zonas) {
         this.zonas = zonas;
     }
+
+    @Override
+    public String toString() {
+        return this.nombre != null ? this.nombre : "Sin nombre";
+    }
 }

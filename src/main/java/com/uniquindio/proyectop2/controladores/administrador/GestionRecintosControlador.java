@@ -1,40 +1,42 @@
 package com.uniquindio.proyectop2.controladores.administrador;
 
 import com.uniquindio.proyectop2.Model.Recinto;
+import com.uniquindio.proyectop2.Model.Zona;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.interfaces.AdminService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.util.ArrayList;
 
 public class GestionRecintosControlador {
 
-    @FXML
-    private TableView<Recinto> tablaRecintos;
-    @FXML
-    private TableColumn<Recinto, String> colId;
-    @FXML
-    private TableColumn<Recinto, String> colNombre;
-    @FXML
-    private TableColumn<Recinto, String> colDireccion;
-    @FXML
-    private TableColumn<Recinto, String> colCiudad;
-    @FXML
-    private TextField txtId;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtDireccion;
-    @FXML
-    private TextField txtCiudad;
+    @FXML private TableView<Recinto> tablaRecintos;
+    @FXML private TableColumn<Recinto, String> colId;
+    @FXML private TableColumn<Recinto, String> colNombre;
+    @FXML private TableColumn<Recinto, String> colDireccion;
+    @FXML private TableColumn<Recinto, String> colCiudad;
 
+    @FXML private TextField txtId;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtDireccion;
+    @FXML private TextField txtCiudad;
+
+    // 🌟 ENLAZAMOS LOS COMPONENTES NUEVOS DE TU FXML
+    @FXML private TextField txtNombreZona;
+    @FXML private TextField txtCapacidadZona;
+    @FXML private TextField txtPrecioZona;
+    @FXML private ListView<String> listaZonasVisuales;
+
+    // Respetamos tu patrón Factory y tu capa de servicios original
     private final AdminService adminService = DAOFactory.getAdminService();
     private final ObservableList<Recinto> recintos = FXCollections.observableArrayList();
+
+    // Lista temporal en memoria para ir acumulando las zonas antes de empaquetar el Recinto
+    private final ArrayList<Zona> zonasTemporales = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -50,6 +52,10 @@ public class GestionRecintosControlador {
                 txtNombre.setText(seleccionado.getNombre());
                 txtDireccion.setText(seleccionado.getDireccion());
                 txtCiudad.setText(seleccionado.getCiudad());
+
+                // Al seleccionar uno existente limpiamos el creador de zonas dinámicas
+                listaZonasVisuales.getItems().clear();
+                zonasTemporales.clear();
             }
         });
         cargarRecintos();
@@ -64,18 +70,69 @@ public class GestionRecintosControlador {
         }
     }
 
+    // 🌟 NUEVA ACCIÓN: Recibe el clic del botón "Añadir Zona" de tu FXML
+    @FXML
+    private void agregarZonaAListaTemporal() {
+        try {
+            String nombreZ = txtNombreZona.getText() != null ? txtNombreZona.getText().trim() : "";
+            String capacidadStr = txtCapacidadZona.getText() != null ? txtCapacidadZona.getText().trim() : "";
+            String precioStr = txtPrecioZona.getText() != null ? txtPrecioZona.getText().trim() : "";
+
+            if (nombreZ.isBlank() || capacidadStr.isBlank() || precioStr.isBlank()) {
+                mostrarError("Debes completar el nombre, capacidad y precio base de la zona.");
+                return;
+            }
+
+            int capacidad = Integer.parseInt(capacidadStr);
+            double precioBase = Double.parseDouble(precioStr);
+
+            // Estructuramos la zona usando tu atributo 'precioBase'
+            Zona nuevaZona = new Zona();
+            nuevaZona.setNombre(nombreZ);
+            nuevaZona.setCapacidad(capacidad);
+            nuevaZona.setPrecioBase(precioBase);
+
+            zonasTemporales.add(nuevaZona);
+
+            // Lo reflejamos estéticamente en la lista de la pantalla
+            listaZonasVisuales.getItems().add(nombreZ + " (Capacidad: " + capacidad + " | Precio: $" + precioBase + ")");
+
+            // Limpiamos los subcampos para permitir ingresar otra localidad
+            txtNombreZona.clear();
+            txtCapacidadZona.clear();
+            txtPrecioZona.clear();
+
+        } catch (NumberFormatException e) {
+            mostrarError("La capacidad debe ser un número entero y el precio un valor decimal válido.");
+        }
+    }
+
     @FXML
     private void guardarRecinto() {
         try {
+            String nombre = txtNombre.getText() != null ? txtNombre.getText().trim() : "";
+            String direccion = txtDireccion.getText() != null ? txtDireccion.getText().trim() : "";
+            String ciudad = txtCiudad.getText() != null ? txtCiudad.getText().trim() : "";
+
+            if (nombre.isBlank() || direccion.isBlank() || ciudad.isBlank()) {
+                mostrarError("El nombre, dirección y ciudad del recinto son obligatorios.");
+                return;
+            }
+
             Recinto recinto = new Recinto();
             recinto.setIdRecinto(txtId.getText());
-            recinto.setNombre(txtNombre.getText());
-            recinto.setDireccion(txtDireccion.getText());
-            recinto.setCiudad(txtCiudad.getText());
+            recinto.setNombre(nombre);
+            recinto.setDireccion(direccion);
+            recinto.setCiudad(ciudad);
+            recinto.setZonas(zonasTemporales); // 🌟 Le inyectamos la lista de zonas asociadas
 
             if (recinto.getIdRecinto() == null || recinto.getIdRecinto().trim().isEmpty()) {
-                adminService.crearRecinto(recinto);
-                mostrarInfo("Recinto creado correctamente");
+                if (zonasTemporales.isEmpty()) {
+                    mostrarError("Debes añadir al menos una zona/localidad para poder crear el recinto.");
+                    return;
+                }
+                adminService.crearRecinto(recinto); // Delega la persistencia en cascada al servicio
+                mostrarInfo("Recinto creado con éxito. Zonas y asientos generados en la base de datos.");
             } else {
                 adminService.actualizarRecinto(recinto);
                 mostrarInfo("Recinto actualizado correctamente");
@@ -110,6 +167,11 @@ public class GestionRecintosControlador {
         txtNombre.clear();
         txtDireccion.clear();
         txtCiudad.clear();
+        txtNombreZona.clear();
+        txtCapacidadZona.clear();
+        txtPrecioZona.clear();
+        listaZonasVisuales.getItems().clear();
+        zonasTemporales.clear();
         tablaRecintos.getSelectionModel().clearSelection();
     }
 

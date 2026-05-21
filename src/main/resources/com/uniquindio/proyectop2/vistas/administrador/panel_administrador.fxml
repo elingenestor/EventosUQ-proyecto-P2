@@ -20,10 +20,12 @@
             </padding>
         </HBox>
     </top>
+
     <left>
         <VBox spacing="10.0" prefWidth="220.0" style="-fx-background-color: #e5e7eb;">
             <children>
                 <Button text="Gestión de usuarios" maxWidth="Infinity" onAction="#cargarVistaUsuarios"/>
+                <Button text="Gestión de eventos" maxWidth="Infinity" onAction="#cargarVistaEventos"/>
                 <Button text="Gestión de recintos" maxWidth="Infinity" onAction="#cargarVistaRecintos"/>
                 <Button text="Reportes" maxWidth="Infinity" onAction="#cargarVistaReportes"/>
             </children>
@@ -32,6 +34,7 @@
             </padding>
         </VBox>
     </left>
+
     <center>
         <StackPane fx:id="contenedorPrincipal" prefWidth="800.0" prefHeight="600.0" />
     </center>

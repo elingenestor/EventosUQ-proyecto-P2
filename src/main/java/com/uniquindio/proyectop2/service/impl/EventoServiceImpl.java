@@ -23,12 +23,17 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public void crearEvento(Evento evento) throws Exception {
-        evento.setEstado(EstadoEvento.BORRADOR);
+        validarEvento(evento);
+        evento.setEstado(EstadoEvento.BORRADOR); // Inicia como borrador automáticamente
         eventoDAO.save(evento);
     }
 
     @Override
     public void actualizarEvento(Evento evento) throws Exception {
+        validarEvento(evento);
+        if (evento.getIdEvento() == null || evento.getIdEvento().isBlank()) {
+            throw new Exception("El evento no tiene un ID válido para actualizar.");
+        }
         eventoDAO.update(evento);
     }
 
@@ -44,14 +49,20 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public void cancelarEvento(String idEvento) throws Exception {
+        if (idEvento == null || idEvento.isBlank()) {
+            throw new Exception("El ID del evento es obligatorio.");
+        }
         eventoDAO.cambiarEstado(idEvento, EstadoEvento.CANCELADO);
-        // Aquí se notificará a los observadores automáticamente por el modelo
     }
 
     @Override
     public List<Evento> listarEventosDisponibles(String ciudad, CategoriaEvento categoria, LocalDate fechaInicio, LocalDate fechaFin) throws Exception {
+        if (ciudad == null && categoria == null && fechaInicio == null && fechaFin == null) {
+            return eventoDAO.findAll();
+        }
         return eventoDAO.findByFiltros(ciudad, categoria, fechaInicio, fechaFin);
     }
+
 
     @Override
     public Evento obtenerDetalleEvento(String idEvento) throws Exception {
@@ -60,7 +71,6 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public boolean verificarDisponibilidadAsientos(String idEvento, Zona zona, List<Asiento> asientos) throws Exception {
-        // Lógica de verificación: comprobar que todos los asientos estén disponibles
         for (Asiento a : asientos) {
             Asiento asientoBD = asientoDAO.findById(a.getIdAsiento());
             if (asientoBD == null || asientoBD.getEstado() != com.uniquindio.proyectop2.Enums.EstadoAsiento.DISPONIBLE) {
@@ -68,5 +78,13 @@ public class EventoServiceImpl implements EventoService {
             }
         }
         return true;
+    }
+
+    private void validarEvento(Evento evento) throws Exception {
+        if (evento == null) throw new Exception("El evento no puede ser nulo.");
+        if (evento.getNombre() == null || evento.getNombre().isBlank()) throw new Exception("El nombre es obligatorio.");
+        if (evento.getCategoria() == null) throw new Exception("La categoría es obligatoria.");
+        if (evento.getCiudad() == null || evento.getCiudad().isBlank()) throw new Exception("La ciudad es obligatoria.");
+        if (evento.getFechaHora() == null) throw new Exception("La fecha y hora son obligatorias.");
     }
 }

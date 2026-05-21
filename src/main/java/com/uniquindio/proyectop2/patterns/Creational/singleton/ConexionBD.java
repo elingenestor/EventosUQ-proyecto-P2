@@ -89,9 +89,15 @@ public class ConexionBD {
                 return;
             }
 
-            if (url != null && url.startsWith("jdbc:h2:mem:")) {
+            if (url != null && url.startsWith("jdbc:h2:")) {
+                // 🌟 RUTAS LIMPIAS: El método ejecutarScript ya les pone el "/" internamente
                 ejecutarScript(connection, "database/schema.sql");
-                ejecutarScript(connection, "database/data_1.sql");
+
+                try {
+                    ejecutarScript(connection, "database/data_1.sql");
+                } catch (Exception e) {
+                    System.out.println("Los datos iniciales ya estaban cargados.");
+                }
             }
 
             initialized = true;
@@ -140,6 +146,7 @@ public class ConexionBD {
                 }
             }
         } catch (IOException | SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException("No se pudo ejecutar el script " + resourcePath, e);
         }
     }

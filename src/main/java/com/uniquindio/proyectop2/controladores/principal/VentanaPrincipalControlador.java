@@ -1,10 +1,11 @@
 package com.uniquindio.proyectop2.controladores.principal;
 
 import com.uniquindio.proyectop2.Model.Usuario;
-import com.uniquindio.proyectop2.controladores.eventos.ListaEventosControlador; // Asegúrate de importar tus controladores
-import com.uniquindio.proyectop2.controladores.principal.InicioControlador;       // Ajusta el paquete según tu estructura
+import com.uniquindio.proyectop2.controladores.eventos.ListaEventosControlador;
+import com.uniquindio.proyectop2.controladores.principal.InicioControlador;
 import com.uniquindio.proyectop2.controladores.compras.MisComprasControlador;
 import com.uniquindio.proyectop2.controladores.usuario.PerfilUsuarioControlador;
+import com.uniquindio.proyectop2.util.SesionActual; // IMPORTAMOS EL SINGLETON
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,31 +16,25 @@ import java.io.IOException;
 public class VentanaPrincipalControlador {
 
     @FXML
-    private BorderPane contenedorPrincipal; // Estructura limpia usando BorderPane
+    private BorderPane contenedorPrincipal;
 
     @FXML
-    private Label lblBienvenida; // Saludo personalizado al usuario
+    private Label lblBienvenida;
 
     @FXML
-    private Label lblTituloSeccion; // Título dinámico de la cabecera
-
-    private Usuario usuario; // Guardamos el estado del usuario logueado
+    private Label lblTituloSeccion;
 
     @FXML
     private void initialize() {
-        // La vista inicial se carga por defecto como "Inicio"
-        mostrarInicio();
-    }
+        // 1. Obtenemos el usuario directamente del Singleton de forma segura
+        Usuario usuarioLogueado = SesionActual.getInstance().getUsuarioActual();
 
-    /**
-     * Recibe el usuario desde la pantalla de Login e inicializa la interfaz.
-     */
-    public void inicializar(Usuario usuario) {
-        this.usuario = usuario;
-        if (lblBienvenida != null && usuario != null) {
-            lblBienvenida.setText("Bienvenido(a), " + usuario.getNombreCompleto());
+        // 2. Colocamos el texto de bienvenida de inmediato
+        if (lblBienvenida != null && usuarioLogueado != null) {
+            lblBienvenida.setText("Bienvenido(a), " + usuarioLogueado.getNombreCompleto());
         }
-        // Recargamos el inicio para que el controlador interno reciba el usuario
+
+        // 3. Cargamos la vista inicial (ahora sí llevará el usuario correctamente)
         mostrarInicio();
     }
 
@@ -63,46 +58,39 @@ public class VentanaPrincipalControlador {
         cargarVista("/com/uniquindio/proyectop2/vistas/usuarios/perfil_usuario.fxml", "Mi Perfil");
     }
 
-    /**
-     * Método maestro de navegación: Carga el FXML, actualiza el título,
-     * controla errores en pantalla e inyecta los datos del usuario.
-     */
     private void cargarVista(String rutaFXML, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
             Node vista = loader.load();
 
-            // 1. Cambiamos la vista en el centro del BorderPane
             if (contenedorPrincipal != null) {
                 contenedorPrincipal.setCenter(vista);
             }
 
-            // 2. Actualizamos el título de la sección de manera dinámica
             if (lblTituloSeccion != null) {
                 lblTituloSeccion.setText(titulo);
             }
 
-            // 3. Inyección dinámica del objeto Usuario según la pantalla activa
+            // 4. Recuperamos el usuario del Singleton para inyectarlo en las sub-vistas
+            Usuario usuarioLogueado = SesionActual.getInstance().getUsuarioActual();
             Object controladorDestino = loader.getController();
-            if (controladorDestino != null && usuario != null) {
 
+            if (controladorDestino != null && usuarioLogueado != null) {
                 if (controladorDestino instanceof InicioControlador) {
-                    ((InicioControlador) controladorDestino).setUsuario(usuario);
+                    ((InicioControlador) controladorDestino).setUsuario(usuarioLogueado);
                 }
                 else if (controladorDestino instanceof ListaEventosControlador) {
-                    ((ListaEventosControlador) controladorDestino).setUsuario(usuario);
+                    ((ListaEventosControlador) controladorDestino).setUsuario(usuarioLogueado);
                 }
                 else if (controladorDestino instanceof MisComprasControlador) {
-                    ((MisComprasControlador) controladorDestino).setUsuario(usuario);
+                    ((MisComprasControlador) controladorDestino).setUsuario(usuarioLogueado);
                 }
                 else if (controladorDestino instanceof PerfilUsuarioControlador) {
-                    ((PerfilUsuarioControlador) controladorDestino).setUsuario(usuario);
+                    ((PerfilUsuarioControlador) controladorDestino).setUsuario(usuarioLogueado);
                 }
-                // Puedes agregar más "else if" aquí para futuras pantallas (Compras, Perfil, etc.)
             }
 
         } catch (IOException e) {
-            // Control de errores elegante: muestra el error en la interfaz sin romper el programa
             if (contenedorPrincipal != null) {
                 contenedorPrincipal.setCenter(new Label("No se pudo cargar la vista: " + rutaFXML));
             }

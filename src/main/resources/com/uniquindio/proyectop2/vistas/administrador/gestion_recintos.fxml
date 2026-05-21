@@ -6,9 +6,11 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+
 
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.uniquindio.proyectop2.controladores.administrador.GestionRecintosControlador"
@@ -40,7 +42,32 @@
                 <Label text="Ciudad" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
                 <TextField fx:id="txtCiudad" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
             </children>
+            <!-- ... debajo de la caja de texto txtCiudad en el GridPane ... -->
         </GridPane>
+
+
+        <!-- PANEL NUEVO PARA AGREGAR LAS ZONAS DE FORMA DINÁMICA -->
+        <VBox spacing="8.0" style="-fx-border-color: #cccccc; -fx-border-width: 1px; -fx-padding: 10px;">
+            <children>
+                <Label text="Configuración de Localidades / Zonas" style="-fx-font-weight: bold;"/>
+                <HBox spacing="10.0">
+                    <children>
+                        <TextField fx:id="txtNombreZona" promptText="Nombre Zona (ej: VIP)"/>
+                        <TextField fx:id="txtCapacidadZona" promptText="Capacidad (ej: 100)"/>
+                        <TextField fx:id="txtPrecioZona" promptText="Precio Base (ej: 50000)"/>
+                        <Button text="Añadir Zona" onAction="#agregarZonaAListaTemporal"/>
+                    </children>
+                </HBox>
+
+                <!-- LISTA VISUAL CORREGIDA Y TIPADA PARA EVITAR EL CRASH -->
+                <ListView fx:id="listaZonasVisuales" prefHeight="100.0">
+                    <placeholder>
+                        <Label text="No hay zonas añadidas todavía." />
+                    </placeholder>
+                </ListView>
+            </children>
+        </VBox>
+
         <HBox spacing="10.0">
             <children>
                 <Button text="Guardar / Actualizar" onAction="#guardarRecinto"/>
@@ -51,3 +78,4 @@
         </HBox>
     </children>
 </VBox>
+

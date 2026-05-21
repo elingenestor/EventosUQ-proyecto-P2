@@ -21,6 +21,11 @@ public class PanelAdministradorControlador {
     }
 
     @FXML
+    private void cargarVistaEventos() {
+        cargarVista("/com/uniquindio/proyectop2/vistas/administrador/gestion_eventos.fxml");
+    }
+
+    @FXML
     private void cargarVistaRecintos() {
         cargarVista("/com/uniquindio/proyectop2/vistas/administrador/gestion_recintos.fxml");
     }

@@ -14,9 +14,7 @@ public interface EventoService {
     void publicarEvento(String idEvento) throws Exception;
     void pausarEvento(String idEvento) throws Exception;
     void cancelarEvento(String idEvento) throws Exception;
-    List<Evento> listarEventosDisponibles(String ciudad, CategoriaEvento categoria,LocalDate fechaInicio, LocalDate fechaFin) throws Exception;
+    List<Evento> listarEventosDisponibles(String ciudad, CategoriaEvento categoria, LocalDate fechaInicio, LocalDate fechaFin) throws Exception;
     Evento obtenerDetalleEvento(String idEvento) throws Exception;
     boolean verificarDisponibilidadAsientos(String idEvento, Zona zona, List<Asiento> asientos) throws Exception;
-
-
 }

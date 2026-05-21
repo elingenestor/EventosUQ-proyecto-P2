@@ -65,21 +65,76 @@ public class RecintoDAOImpl implements RecintoDAO {
 
     @Override
     public void save(Recinto recinto) {
-        String sql = "INSERT INTO recinto (nombre, direccion, ciudad) VALUES (?, ?, ?)";
-        try (Connection conn = ConexionBD.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, recinto.getNombre());
-            ps.setString(2, recinto.getDireccion());
-            ps.setString(3, recinto.getCiudad());
-            ps.executeUpdate();
-            ResultSet keys = ps.getGeneratedKeys();
-            if (keys.next()) {
-                recinto.setIdRecinto(String.valueOf(keys.getInt(1)));
+        String sqlRecinto = "INSERT INTO recinto (nombre, direccion, ciudad) VALUES (?, ?, ?)";
+        String sqlZona = "INSERT INTO zona (nombre, capacidad, precio_base, id_recinto) VALUES (?, ?, ?, ?)";
+        String sqlAsiento = "INSERT INTO asiento (fila, numero, estado, id_zona) VALUES (?, ?, 'DISPONIBLE', ?)";
+
+        Connection conn = null;
+        try {
+            conn = ConexionBD.getInstance().getConnection();
+            conn.setAutoCommit(false); // 🌟 Iniciamos una transacción segura
+
+            // 1. GUARDAMOS EL RECINTO
+            try (PreparedStatement psRecinto = conn.prepareStatement(sqlRecinto, Statement.RETURN_GENERATED_KEYS)) {
+                psRecinto.setString(1, recinto.getNombre());
+                psRecinto.setString(2, recinto.getDireccion());
+                psRecinto.setString(3, recinto.getCiudad());
+                psRecinto.executeUpdate();
+
+                ResultSet keys = psRecinto.getGeneratedKeys();
+                if (keys.next()) {
+                    recinto.setIdRecinto(String.valueOf(keys.getInt(1)));
+                }
             }
+
+            // 2. RECORREMOS Y GUARDAMOS LAS ZONAS DE ESTE RECINTO
+            for (com.uniquindio.proyectop2.Model.Zona zona : recinto.getZonas()) {
+                int idZonaGenerada = 0;
+                try (PreparedStatement psZona = conn.prepareStatement(sqlZona, Statement.RETURN_GENERATED_KEYS)) {
+                    psZona.setString(1, zona.getNombre());
+                    psZona.setInt(2, zona.getCapacidad());
+                    psZona.setDouble(3, zona.getPrecioBase());
+                    psZona.setInt(4, Integer.parseInt(recinto.getIdRecinto()));
+                    psZona.executeUpdate();
+
+                    ResultSet keysZona = psZona.getGeneratedKeys();
+                    if (keysZona.next()) {
+                        idZonaGenerada = keysZona.getInt(1);
+                    }
+                }
+
+                // 3. 🚀 GENERACIÓN MATEMÁTICA CORREGIDA DE SILLAS
+                try (PreparedStatement psAsiento = conn.prepareStatement(sqlAsiento)) {
+                    int asientosPorFila = 10;
+
+                    for (int i = 1; i <= zona.getCapacidad(); i++) {
+                        char letraFila = (char) ('A' + ((i - 1) / asientosPorFila));
+                        String fila = String.valueOf(letraFila);
+                        int numeroSilla = ((i - 1) % asientosPorFila) + 1;
+
+                        psAsiento.setString(1, fila);        // Parámetro 1
+                        psAsiento.setInt(2, numeroSilla);    // Parámetro 2
+                        psAsiento.setInt(3, idZonaGenerada); // Parámetro 3
+                        psAsiento.addBatch();
+                    }
+                    psAsiento.executeBatch();
+                }
+
+            }
+
+            conn.commit(); // Si todo salió perfecto, guarda los cambios reales en MySQL
         } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
             e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try { conn.setAutoCommit(true); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
         }
     }
+
 
     @Override
     public void update(Recinto recinto) {

@@ -80,18 +80,13 @@ public class IniciarSesionControlador {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
         Parent root = loader.load();
 
-        // Si la ventana de destino requiere inicialización manual (como la principal que armamos),
-        // le pasamos el usuario. Si es la de admin, el Singleton se encargará de darle los datos allá.
-        Object controladorDestino = loader.getController();
-        if (controladorDestino instanceof com.uniquindio.proyectop2.controladores.principal.VentanaPrincipalControlador) {
-            Usuario usuarioLogueado = SesionActual.getInstance().getUsuarioActual();
-            ((com.uniquindio.proyectop2.controladores.principal.VentanaPrincipalControlador) controladorDestino).inicializar(usuarioLogueado);
-        }
+        // Ya no necesitas inyectar el usuario manualmente aquí.
+        // Al cargar la ventana, ella sola tomará los datos de SesionActual.getInstance()
 
         Stage stage = (Stage) txtCorreo.getScene().getWindow();
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root)); // Ajuste de tamaño automático
         stage.setTitle(titulo);
-        stage.centerOnScreen(); // Mantiene la aplicación centrada estéticamente en el monitor
+        stage.centerOnScreen();
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
