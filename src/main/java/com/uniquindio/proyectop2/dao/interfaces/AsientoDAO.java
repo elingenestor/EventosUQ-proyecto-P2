@@ -10,7 +10,7 @@ public interface    AsientoDAO {
     void save(Asiento asiento);
     void update(Asiento asiento);
     void delete(String id);
-    static void cambiarEstado(String idAsiento, EstadoAsiento nuevoEstado);
+    void cambiarEstado(String idAsiento, EstadoAsiento nuevoEstado);
     void bloquearAsientos(List<Integer> idsAsientos);
     void liberarAsientos(List<Integer> idsAsientos);
 }

@@ -132,7 +132,7 @@ public class CompraServiceImpl implements com.uniquindio.proyectop2.service.inte
         if (compra == null) {
             throw new Exception("No existe la compra.");
         }
-        compra.setEstado(EstadoCompra.REEMBOLDADA);
+        compra.setEstado(EstadoCompra.REEMBOLSADA);
         compraDAO.update(compra);
 
         List<Entrada> entradas = entradaDAO.findByCompra(idCompra);

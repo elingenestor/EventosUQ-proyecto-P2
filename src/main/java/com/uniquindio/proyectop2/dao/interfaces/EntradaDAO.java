@@ -9,7 +9,7 @@ public interface EntradaDAO {
     List<Entrada> findByCompra(String idCompra);
     List<Entrada> findByEvento(String idEvento);
     void save (Entrada entrada);
-    static void update(Entrada entrada);
+    void update(Entrada entrada);
     void delete (String id);
     void cambiarEstado (String id, EstadoEntrada nuevoEstado);
 }
