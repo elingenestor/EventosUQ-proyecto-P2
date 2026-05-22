@@ -140,7 +140,7 @@ public class Evento implements Observable {
     }
 
     @Override
-    public void notificarObserver(){
+    public void notificarObservers(){
         for (Observer observer : observers) {
             observer.actualizar(this, this.estado);
         }
