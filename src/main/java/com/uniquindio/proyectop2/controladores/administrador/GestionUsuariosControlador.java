@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -15,38 +14,28 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class GestionUsuariosControlador {
 
-    @FXML
-    private TableView<Usuario> tablaUsuarios;
-    @FXML
-    private TableColumn<Usuario, String> colId;
-    @FXML
-    private TableColumn<Usuario, String> colNombre;
-    @FXML
-    private TableColumn<Usuario, String> colEmail;
-    @FXML
-    private TableColumn<Usuario, String> colTelefono;
-    @FXML
-    private TextField txtId;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtEmail;
-    @FXML
-    private TextField txtTelefono;
-    @FXML
-    private TextField txtPassword;
-    @FXML
-    private Button btnGuardar;
+    @FXML private TableView<Usuario> tablaUsuarios;
+    @FXML private TableColumn<Usuario, String> colId;
+    @FXML private TableColumn<Usuario, String> colNombre;
+    @FXML private TableColumn<Usuario, String> colEmail;
+    @FXML private TableColumn<Usuario, String> colTelefono;
+
+    @FXML private TextField txtId;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtTelefono;
+    @FXML private TextField txtPassword;
 
     private final AdminService adminService = DAOFactory.getAdminService();
     private final ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        colId.setCellValueFactory(new PropertyValueFactory<Usuario, String>("idUsuario"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<Usuario, String>("nombreCompleto"));
-        colEmail.setCellValueFactory(new PropertyValueFactory<Usuario, String>("email"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<Usuario, String>("telefono"));
+        // Vinculación estricta con los atributos del modelo Usuario
+        colId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
 
         tablaUsuarios.setItems(usuarios);
         tablaUsuarios.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionado) -> {
@@ -73,19 +62,31 @@ public class GestionUsuariosControlador {
     @FXML
     private void guardarUsuario() {
         try {
+            String nombre = txtNombre.getText() != null ? txtNombre.getText().trim() : "";
+            String email = txtEmail.getText() != null ? txtEmail.getText().trim() : "";
+            String telefono = txtTelefono.getText() != null ? txtTelefono.getText().trim() : "";
+            String password = txtPassword.getText() != null ? txtPassword.getText() : "";
+
+            // 🌟 VALIDACIÓN DE SEGURIDAD ANTES DE ENVIAR A H2
+            if (nombre.isBlank() || email.isBlank() || telefono.isBlank() || password.isBlank()) {
+                mostrarError("Todos los campos (Nombre, Email, Teléfono y Contraseña) son obligatorios.");
+                return;
+            }
+
             Usuario usuario = new Usuario();
             usuario.setIdUsuario(txtId.getText());
-            usuario.setNombreCompleto(txtNombre.getText());
-            usuario.setEmail(txtEmail.getText());
-            usuario.setTelefono(txtTelefono.getText());
-            usuario.setPassword(txtPassword.getText());
+            usuario.setNombreCompleto(nombre);
+            usuario.setEmail(email);
+            usuario.setTelefono(telefono);
+            usuario.setPassword(password);
+            usuario.setAdmin(false); // Por defecto se crean como clientes comunes
 
             if (usuario.getIdUsuario() == null || usuario.getIdUsuario().trim().isEmpty()) {
                 adminService.crearUsuario(usuario);
-                mostrarInfo("Usuario creado correctamente");
+                mostrarInfo("Usuario creado correctamente.");
             } else {
                 adminService.actualizarUsuario(usuario);
-                mostrarInfo("Usuario actualizado correctamente");
+                mostrarInfo("Usuario actualizado correctamente.");
             }
             limpiarFormulario();
             cargarUsuarios();
@@ -99,11 +100,11 @@ public class GestionUsuariosControlador {
         try {
             String id = txtId.getText();
             if (id == null || id.trim().isEmpty()) {
-                mostrarError("Selecciona un usuario para eliminar");
+                mostrarError("Selecciona un usuario de la tabla para eliminar.");
                 return;
             }
             adminService.eliminarUsuario(id);
-            mostrarInfo("Usuario eliminado correctamente");
+            mostrarInfo("Usuario eliminado correctamente.");
             limpiarFormulario();
             cargarUsuarios();
         } catch (Exception e) {
@@ -122,18 +123,16 @@ public class GestionUsuariosControlador {
     }
 
     private void mostrarInfo(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alert.setTitle("Éxito");
         alert.setHeaderText(null);
-        alert.setContentText(mensaje);
         alert.showAndWait();
     }
 
     private void mostrarError(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR, mensaje);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(mensaje);
         alert.showAndWait();
     }
 }
