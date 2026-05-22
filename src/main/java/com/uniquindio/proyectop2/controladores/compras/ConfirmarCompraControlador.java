@@ -3,7 +3,9 @@ package com.uniquindio.proyectop2.controladores.compras;
 import com.uniquindio.proyectop2.Model.*;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.patterns.Structural.facade.ProcesadorCompraFacade;
+import com.uniquindio.proyectop2.service.impl.CompraServiceImpl;
 import com.uniquindio.proyectop2.service.impl.UsuarioServiceImpl;
+import com.uniquindio.proyectop2.service.interfaces.CompraService;
 import com.uniquindio.proyectop2.service.interfaces.UsuarioService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,6 +36,7 @@ public class ConfirmarCompraControlador {
     private final ObservableList<ServicioAdicional> serviciosDisponibles = FXCollections.observableArrayList();
     private final ObservableList<MetodoPago> metodosPago = FXCollections.observableArrayList();
     private final ProcesadorCompraFacade procesadorCompraFacade = new ProcesadorCompraFacade();
+    private final CompraService compraService = new CompraServiceImpl();
     private final UsuarioService usuarioService = new UsuarioServiceImpl(
             DAOFactory.crearUsuarioDAO(),
             DAOFactory.crearMetodoPagoDAO()
@@ -41,6 +44,9 @@ public class ConfirmarCompraControlador {
 
     private Usuario usuario;
     private Evento evento;
+    private boolean modoEdicion = false;
+    private boolean operacionExitosa = false;
+    private String idCompraEdicion;
 
     @FXML
     private void initialize() {
@@ -81,6 +87,9 @@ public class ConfirmarCompraControlador {
     public void inicializar(Usuario usuario, Evento evento, List<Asiento> asientos) {
         this.usuario = usuario;
         this.evento = evento;
+        this.modoEdicion = false;
+        this.idCompraEdicion = null;
+        this.operacionExitosa = false;
         asientosSeleccionados.setAll(asientos != null ? asientos : new ArrayList<>());
 
         lblUsuario.setText(usuario != null ? usuario.getNombreCompleto() : "-");
@@ -102,21 +111,67 @@ public class ConfirmarCompraControlador {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
 
+        cmbMetodosPago.setDisable(false);
         actualizarTotal();
+    }
+
+    public void inicializarEdicion(Usuario usuario, Evento evento, List<Asiento> asientos, List<ServicioAdicional> serviciosActuales, MetodoPago metodoPagoActual, String idCompra) {
+        inicializar(usuario, evento, asientos);
+        this.modoEdicion = true;
+        this.idCompraEdicion = idCompra;
+
+        if (serviciosActuales != null && !serviciosActuales.isEmpty()) {
+            for (ServicioAdicional servicioActual : serviciosActuales) {
+                for (int i = 0; i < serviciosDisponibles.size(); i++) {
+                    ServicioAdicional disponible = serviciosDisponibles.get(i);
+                    if (disponible != null && servicioActual != null && disponible.getIdServicio() != null && disponible.getIdServicio().equals(servicioActual.getIdServicio())) {
+                        lstServicios.getSelectionModel().select(i);
+                    }
+                }
+            }
+        }
+
+        if (metodoPagoActual != null) {
+            for (int i = 0; i < metodosPago.size(); i++) {
+                MetodoPago metodo = metodosPago.get(i);
+                if (metodo != null && metodo.getIdMetodoPago() != null && metodo.getIdMetodoPago().equals(metodoPagoActual.getIdMetodoPago())) {
+                    cmbMetodosPago.getSelectionModel().select(i);
+                    break;
+                }
+            }
+        }
+
+        cmbMetodosPago.setDisable(true);
+    }
+
+    public boolean isOperacionExitosa() {
+        return operacionExitosa;
     }
 
     @FXML
     private void confirmarCompra() {
-        MetodoPago metodo = cmbMetodosPago.getValue();
-        if (metodo == null) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un método de pago", "Debes elegir un método de pago.");
-            return;
-        }
-
         List<ServicioAdicional> serviciosSeleccionados = new ArrayList<>(lstServicios.getSelectionModel().getSelectedItems());
 
         try {
+            if (modoEdicion) {
+                if (idCompraEdicion == null) {
+                    throw new Exception("No se encontró la compra que vas a modificar.");
+                }
+                compraService.modificarCompra(idCompraEdicion, new ArrayList<>(asientosSeleccionados), serviciosSeleccionados);
+                operacionExitosa = true;
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Compra modificada", "La compra fue actualizada correctamente.");
+                cerrarVentana();
+                return;
+            }
+
+            MetodoPago metodo = cmbMetodosPago.getValue();
+            if (metodo == null) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un método de pago", "Debes elegir un método de pago.");
+                return;
+            }
+
             Compra compra = procesadorCompraFacade.procesarCompra(usuario, evento, new ArrayList<>(asientosSeleccionados), serviciosSeleccionados, metodo);
+            operacionExitosa = true;
             mostrarAlerta(Alert.AlertType.INFORMATION, "Compra exitosa", "La compra " + compra.getIdCompra() + " fue procesada correctamente.");
             cerrarVentana();
         } catch (Exception e) {

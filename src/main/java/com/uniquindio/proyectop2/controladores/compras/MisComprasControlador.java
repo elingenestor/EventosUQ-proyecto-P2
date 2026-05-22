@@ -1,10 +1,13 @@
 package com.uniquindio.proyectop2.controladores.compras;
 
+import com.uniquindio.proyectop2.Model.Asiento;
 import com.uniquindio.proyectop2.Model.Compra;
 import com.uniquindio.proyectop2.Model.Entrada;
+import com.uniquindio.proyectop2.Model.Evento;
 import com.uniquindio.proyectop2.Model.Usuario;
 import com.uniquindio.proyectop2.dao.interfaces.CompraDAO;
 import com.uniquindio.proyectop2.dao.interfaces.EntradaDAO;
+import com.uniquindio.proyectop2.dao.interfaces.EventoDAO;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.impl.CompraServiceImpl;
 import com.uniquindio.proyectop2.service.interfaces.CompraService;
@@ -13,11 +16,18 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MisComprasControlador {
@@ -43,20 +53,19 @@ public class MisComprasControlador {
     private final ObservableList<Entrada> entradasDetalle = FXCollections.observableArrayList();
     private final CompraDAO compraDAO = DAOFactory.obtenerCompraDAO();
     private final EntradaDAO entradaDAO = DAOFactory.obtenerEntradaDAO();
+    private final EventoDAO eventoDAO = DAOFactory.obtenerEventoDAO();
     private final CompraService compraService = new CompraServiceImpl();
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    private Usuario usuario; // Almacena el usuario inyectado manualmente
+    private Usuario usuario;
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-
-        // Si el usuario llegó bien, pintamos su nombre y listamos sus compras de la base de datos
         if (usuario != null) {
             if (lblUsuario != null) {
                 lblUsuario.setText(usuario.getNombreCompleto());
             }
-            cargarCompras(); // Ahora sí llamamos a cargar de forma segura
+            cargarCompras();
         }
     }
 
@@ -114,7 +123,9 @@ public class MisComprasControlador {
 
     private void cargarCompras() {
         if (this.usuario == null) {
-            lblUsuario.setText("No hay usuario autenticado");
+            if (lblUsuario != null) {
+                lblUsuario.setText("No hay usuario autenticado");
+            }
             compras.clear();
             limpiarDetalle();
             mostrarAlerta("Sesión no encontrada", "No hay un usuario autenticado para mostrar sus compras.");
@@ -159,6 +170,61 @@ public class MisComprasControlador {
     }
 
     @FXML
+    private void modificarCompra() {
+        Compra seleccionada = tblCompras.getSelectionModel().getSelectedItem();
+        if (seleccionada == null) {
+            mostrarAlerta("Selecciona una compra", "Debes elegir una compra de la tabla.");
+            return;
+        }
+
+        if (seleccionada.getEstado() == null) {
+            mostrarAlerta("Estado inválido", "La compra seleccionada no tiene un estado válido.");
+            return;
+        }
+
+        if (seleccionada.getEstado().name().equals("CANCELADA") || seleccionada.getEstado().name().equals("REEMBOLSADA")) {
+            mostrarAlerta("Compra no modificable", "La compra ya está cancelada o reembolsada.");
+            return;
+        }
+
+        try {
+            Evento eventoCompleto = seleccionada.getEvento();
+            if (eventoCompleto == null || eventoCompleto.getIdEvento() == null) {
+                eventoCompleto = eventoDAO.findById(seleccionada.getEvento() != null ? seleccionada.getEvento().getIdEvento() : null);
+            }
+
+            if (eventoCompleto == null) {
+                mostrarAlerta("Evento no disponible", "No se pudo cargar el evento asociado a la compra.");
+                return;
+            }
+
+            List<Entrada> entradasActuales = entradaDAO.findByCompra(seleccionada.getIdCompra());
+            List<Asiento> asientosActuales = new ArrayList<>();
+            for (Entrada entrada : entradasActuales) {
+                if (entrada.getAsiento() != null) {
+                    asientosActuales.add(entrada.getAsiento());
+                }
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/compras/seleccion_asientos.fxml"));
+            Parent root = loader.load();
+            SeleccionAsientosControlador controlador = loader.getController();
+            controlador.inicializarEdicion(usuario, eventoCompleto, asientosActuales, seleccionada.getServiciosAdicionales(), seleccionada.getMetodoPagoUsado(), seleccionada.getIdCompra());
+
+            Stage stage = new Stage();
+            stage.setTitle("Modificar compra");
+            stage.setScene(new Scene(root, 1100, 760));
+            stage.showAndWait();
+
+            cargarCompras();
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la pantalla para modificar la compra.");
+        } catch (Exception e) {
+            mostrarAlerta("Error", e.getMessage());
+        }
+    }
+
+    @FXML
     private void cancelarCompra() {
         Compra seleccionada = tblCompras.getSelectionModel().getSelectedItem();
         if (seleccionada == null) {
@@ -198,15 +264,14 @@ public class MisComprasControlador {
     private void volver() {
         try {
             BorderPane principal = (BorderPane) tblCompras.getScene().getRoot();
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+            FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/uniquindio/proyectop2/vistas/principal/inicio.fxml")
             );
-            javafx.scene.Node root = loader.load();
+            Node root = loader.load();
             principal.setCenter(root);
 
             com.uniquindio.proyectop2.controladores.principal.InicioControlador controlador = loader.getController();
             if (controlador != null) {
-                // CORREGIDO: Se inyecta usando tu nuevo Singleton seguro SesionActual
                 controlador.setUsuario(SesionActual.getInstance().getUsuarioActual());
             }
         } catch (Exception e) {
@@ -226,7 +291,7 @@ public class MisComprasControlador {
     }
 
     private String valorOGuion(String valor) {
-        return (valor == null || valor.isBlank()) ? "-" : valor;
+        return valor == null || valor.isBlank() ? "-" : valor;
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

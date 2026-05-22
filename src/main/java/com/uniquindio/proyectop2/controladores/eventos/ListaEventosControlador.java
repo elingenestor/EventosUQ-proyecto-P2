@@ -117,6 +117,7 @@ public class ListaEventosControlador {
             stage.setScene(new Scene(root, 980, 700));
             stage.showAndWait();
         } catch (IOException e) {
+            e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir el detalle del evento.");
         }
     }

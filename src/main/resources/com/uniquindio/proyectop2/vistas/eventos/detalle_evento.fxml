@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.ScrollPane?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
@@ -36,24 +36,27 @@
                         <Insets top="16" right="16" bottom="16" left="16"/>
                     </padding>
 
+                    <!-- 🌟 CORREGIDO: Envolvemos correctamente los elementos dentro de children -->
                     <GridPane hgap="14" vgap="10">
-                        <Label text="Ciudad:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                        <Label fx:id="lblCiudad" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <children>
+                            <Label text="Ciudad:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <Label fx:id="lblCiudad" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                        <Label text="Fecha y hora:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                        <Label fx:id="lblFecha" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                            <Label text="Fecha y hora:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <Label fx:id="lblFecha" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                        <Label text="Estado:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                        <Label fx:id="lblEstado" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            <Label text="Estado:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <Label fx:id="lblEstado" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                        <Label text="Recinto:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <Label fx:id="lblRecinto" text="-" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                            <Label text="Recinto:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <Label fx:id="lblRecinto" text="-" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                        <Label text="Dirección del recinto:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                        <Label fx:id="lblDireccionRecinto" text="-" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            <Label text="Dirección del recinto:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                            <Label fx:id="lblDireccionRecinto" text="-" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                        <Label text="Políticas de cancelación:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                        <Label fx:id="lblPoliticas" text="-" wrapText="true" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                            <Label text="Políticas de cancelación:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                            <Label fx:id="lblPoliticas" text="-" wrapText="true" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                        </children>
                     </GridPane>
 
                     <Separator/>

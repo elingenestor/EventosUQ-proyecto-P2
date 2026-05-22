@@ -9,7 +9,9 @@ import com.uniquindio.proyectop2.patterns.Creational.builder.CompraBuilder;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CompraServiceImpl implements com.uniquindio.proyectop2.service.interfaces.CompraService {
 
@@ -86,7 +88,100 @@ public class CompraServiceImpl implements com.uniquindio.proyectop2.service.inte
 
     @Override
     public void modificarCompra(String idCompra, List<Asiento> nuevosAsientos, List<ServicioAdicional> nuevosServicios) throws Exception {
-        throw new UnsupportedOperationException("Modificar compra aún no está implementado.");
+        Compra compra = compraDAO.findById(idCompra);
+        if (compra == null) {
+            throw new Exception("No existe la compra.");
+        }
+
+        if (compra.getEstado() == EstadoCompra.CANCELADA
+                || compra.getEstado() == EstadoCompra.REEMBOLSADA
+                || compra.getEstado() == EstadoCompra.INCIDENCIA) {
+            throw new Exception("La compra no se puede modificar en su estado actual.");
+        }
+
+        if (nuevosAsientos == null || nuevosAsientos.isEmpty()) {
+            throw new Exception("Debes seleccionar al menos un asiento.");
+        }
+
+        // Validar que no haya asientos repetidos en la nueva selección
+        Set<String> asientosVistos = new HashSet<>();
+        for (Asiento asiento : nuevosAsientos) {
+            if (asiento == null || asiento.getIdAsiento() == null) {
+                throw new Exception("Hay asientos inválidos en la nueva selección.");
+            }
+            if (!asientosVistos.add(asiento.getIdAsiento())) {
+                throw new Exception("No puedes repetir el mismo asiento en la compra.");
+            }
+        }
+
+        List<Entrada> entradasAnteriores = entradaDAO.findByCompra(idCompra);
+        Set<String> asientosActuales = new HashSet<>();
+        for (Entrada entrada : entradasAnteriores) {
+            if (entrada.getAsiento() != null && entrada.getAsiento().getIdAsiento() != null) {
+                asientosActuales.add(entrada.getAsiento().getIdAsiento());
+            }
+        }
+
+        // Validar disponibilidad antes de tocar la compra anterior
+        List<Asiento> asientosValidados = new ArrayList<>();
+        for (Asiento asiento : nuevosAsientos) {
+            Asiento asientoBD = asientoDAO.findById(asiento.getIdAsiento());
+            if (asientoBD == null) {
+                throw new Exception("Uno de los asientos seleccionados no existe.");
+            }
+            boolean perteneceALaMismaCompra = asientosActuales.contains(asientoBD.getIdAsiento());
+            if (!perteneceALaMismaCompra && asientoBD.getEstado() != EstadoAsiento.DISPONIBLE) {
+                throw new Exception("Uno de los asientos ya no está disponible.");
+            }
+            asientosValidados.add(asientoBD);
+        }
+
+        List<ServicioAdicional> serviciosValidados = new ArrayList<>();
+        if (nuevosServicios != null) {
+            Set<String> serviciosVistos = new HashSet<>();
+            for (ServicioAdicional servicio : nuevosServicios) {
+                if (servicio == null || servicio.getIdServicio() == null) {
+                    continue;
+                }
+                if (!serviciosVistos.add(servicio.getIdServicio())) {
+                    continue;
+                }
+                ServicioAdicional servicioBD = servicioAdicionalDAO.findById(servicio.getIdServicio());
+                if (servicioBD != null) {
+                    serviciosValidados.add(servicioBD);
+                }
+            }
+        }
+
+        // Liberar asientos anteriores y eliminar sus entradas
+        for (Entrada entrada : entradasAnteriores) {
+            if (entrada.getAsiento() != null && entrada.getAsiento().getIdAsiento() != null) {
+                asientoDAO.cambiarEstado(entrada.getAsiento().getIdAsiento(), EstadoAsiento.DISPONIBLE);
+            }
+            if (entrada.getIdEntrada() != null) {
+                entradaDAO.delete(entrada.getIdEntrada());
+            }
+        }
+
+        // Reservar los nuevos asientos y crear nuevas entradas
+        List<Entrada> nuevasEntradas = new ArrayList<>();
+        for (Asiento asientoBD : asientosValidados) {
+            asientoDAO.cambiarEstado(asientoBD.getIdAsiento(), EstadoAsiento.RESERVADO);
+
+            Entrada entrada = new Entrada();
+            entrada.setCompra(compra);
+            entrada.setAsiento(asientoBD);
+            entrada.setZona(asientoBD.getZona());
+            entrada.setPrecioFinal(asientoBD.getZona() != null ? asientoBD.getZona().getPrecioBase() : 0.0);
+            entrada.setEstadoEntrada(EstadoEntrada.ACTIVA);
+            entradaDAO.save(entrada);
+            nuevasEntradas.add(entrada);
+        }
+
+        compra.setEntradas(nuevasEntradas);
+        compra.setServiciosAdicionales(serviciosValidados);
+        compra.setTotal(compra.getCosto());
+        compraDAO.update(compra);
     }
 
     @Override

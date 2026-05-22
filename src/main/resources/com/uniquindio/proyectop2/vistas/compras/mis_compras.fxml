@@ -81,6 +81,7 @@
                 <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
             <Button text="Actualizar" onAction="#actualizarListado"/>
+            <Button text="Modificar compra" onAction="#modificarCompra"/>
             <Button text="Cancelar compra" onAction="#cancelarCompra"/>
         </HBox>
     </bottom>

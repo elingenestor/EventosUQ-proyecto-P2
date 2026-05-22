@@ -80,20 +80,32 @@ public class DetalleEventoControlador {
             mostrarAlerta(Alert.AlertType.WARNING, "Sin evento", "No hay un evento cargado.");
             return;
         }
+
+        if (this.usuario == null) {
+            this.usuario = com.uniquindio.proyectop2.util.SesionActual.getInstance().getUsuarioActual();
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/compras/seleccion_asientos.fxml"));
             Parent root = loader.load();
             SeleccionAsientosControlador controlador = loader.getController();
+
             controlador.inicializar(usuario, evento);
 
             Stage stage = new Stage();
-            stage.setTitle("Selección de asientos");
+            stage.setTitle("Selección de asientos - " + evento.getNombre());
             stage.setScene(new Scene(root, 1050, 720));
+
+            cerrarVentana();
+
             stage.showAndWait();
+
         } catch (IOException e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir la selección de asientos.");
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     private void cerrarVentana() {

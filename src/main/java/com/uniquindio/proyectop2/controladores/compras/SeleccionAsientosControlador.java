@@ -2,10 +2,11 @@ package com.uniquindio.proyectop2.controladores.compras;
 
 import com.uniquindio.proyectop2.Model.Asiento;
 import com.uniquindio.proyectop2.Model.Evento;
+import com.uniquindio.proyectop2.Model.MetodoPago;
+import com.uniquindio.proyectop2.Model.ServicioAdicional;
 import com.uniquindio.proyectop2.Model.Usuario;
 import com.uniquindio.proyectop2.Model.Zona;
 import com.uniquindio.proyectop2.dao.impl.AsientoDAOImpl;
-import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -43,6 +44,10 @@ public class SeleccionAsientosControlador {
 
     private Usuario usuario;
     private Evento evento;
+    private boolean modoEdicion = false;
+    private String idCompraEdicion;
+    private MetodoPago metodoPagoActual;
+    private final List<ServicioAdicional> serviciosIniciales = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -82,7 +87,34 @@ public class SeleccionAsientosControlador {
     public void inicializar(Usuario usuario, Evento evento) {
         this.usuario = usuario;
         this.evento = evento;
+        this.modoEdicion = false;
+        this.idCompraEdicion = null;
+        this.metodoPagoActual = null;
+        this.serviciosIniciales.clear();
+        cargarDatosEvento();
+    }
 
+    public void inicializarEdicion(Usuario usuario, Evento evento, List<Asiento> asientosActuales, List<ServicioAdicional> serviciosActuales, MetodoPago metodoPagoActual, String idCompra) {
+        this.usuario = usuario;
+        this.evento = evento;
+        this.modoEdicion = true;
+        this.idCompraEdicion = idCompra;
+        this.metodoPagoActual = metodoPagoActual;
+        this.serviciosIniciales.clear();
+        if (serviciosActuales != null) {
+            this.serviciosIniciales.addAll(serviciosActuales);
+        }
+        asientosSeleccionados.clear();
+        if (asientosActuales != null) {
+            asientosSeleccionados.addAll(asientosActuales);
+        }
+        cargarDatosEvento();
+        if (cmbZona.getItems() != null && !cmbZona.getItems().isEmpty()) {
+            cmbZona.getSelectionModel().selectFirst();
+        }
+    }
+
+    private void cargarDatosEvento() {
         lblEvento.setText(evento != null ? evento.getNombre() : "-");
         lblCiudad.setText(evento != null ? evento.getCiudad() : "-");
         lblFecha.setText(evento != null && evento.getFechaHora() != null ? evento.getFechaHora().toString() : "-");
@@ -94,6 +126,7 @@ public class SeleccionAsientosControlador {
                 cmbZona.getSelectionModel().selectFirst();
             }
         }
+        actualizarTotal();
     }
 
     @FXML
@@ -141,12 +174,20 @@ public class SeleccionAsientosControlador {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/compras/confirmar_compra.fxml"));
             Parent root = loader.load();
             ConfirmarCompraControlador controlador = loader.getController();
-            controlador.inicializar(usuario, evento, new ArrayList<>(asientosSeleccionados));
+            if (modoEdicion) {
+                controlador.inicializarEdicion(usuario, evento, new ArrayList<>(asientosSeleccionados), new ArrayList<>(serviciosIniciales), metodoPagoActual, idCompraEdicion);
+            } else {
+                controlador.inicializar(usuario, evento, new ArrayList<>(asientosSeleccionados));
+            }
 
             Stage stage = new Stage();
-            stage.setTitle("Confirmar compra");
+            stage.setTitle(modoEdicion ? "Modificar compra" : "Confirmar compra");
             stage.setScene(new Scene(root, 1100, 760));
             stage.showAndWait();
+
+            if (controlador.isOperacionExitosa()) {
+                cerrarVentana();
+            }
         } catch (IOException e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir la confirmación de compra.");
         }
@@ -178,7 +219,6 @@ public class SeleccionAsientosControlador {
         lblTotalEstimado.setText("Total estimado: $" + String.format("%,.2f", total));
     }
 
-
     private boolean estaSeleccionado(Asiento asiento) {
         if (asiento == null || asiento.getIdAsiento() == null) {
             return false;
@@ -189,6 +229,12 @@ public class SeleccionAsientosControlador {
             }
         }
         return false;
+    }
+
+    @FXML
+    private void cerrarVentana() {
+        Stage stage = (Stage) lblEvento.getScene().getWindow();
+        stage.close();
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
