@@ -57,12 +57,21 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public List<Evento> listarEventosDisponibles(String ciudad, CategoriaEvento categoria, LocalDate fechaInicio, LocalDate fechaFin) throws Exception {
-        if (ciudad == null && categoria == null && fechaInicio == null && fechaFin == null) {
-            return eventoDAO.findAll();
-        }
-        return eventoDAO.findByFiltros(ciudad, categoria, fechaInicio, fechaFin);
-    }
+        List<Evento> eventos;
 
+        // 1. Buscamos en la base de datos según los filtros reales
+        if (ciudad == null && categoria == null && fechaInicio == null && fechaFin == null) {
+            eventos = eventoDAO.findAll();
+        } else {
+            eventos = eventoDAO.findByFiltros(ciudad, categoria, fechaInicio, fechaFin);
+        }
+
+        // 2. Filtramos con elegancia (Cambio de ella aplicado): solo eventos publicados y vigentes
+        return eventos.stream()
+                .filter(evento -> evento.getEstado() == EstadoEvento.PUBLICADO)
+                .filter(evento -> evento.getFechaHora() != null && !evento.getFechaHora().isBefore(java.time.LocalDateTime.now()))
+                .toList();
+    }
 
     @Override
     public Evento obtenerDetalleEvento(String idEvento) throws Exception {

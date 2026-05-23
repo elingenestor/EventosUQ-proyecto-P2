@@ -5,16 +5,16 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com"
+            xmlns:fx="http://javafx.com"
             fx:controller="com.uniquindio.proyectop2.controladores.eventos.ListaEventosControlador"
             style="-fx-background-color: #f8fafc;">
 
@@ -38,7 +38,6 @@
                 <Button text="Buscar" onAction="#buscarEventos"/>
                 <Button text="Limpiar" onAction="#limpiarFiltros"/>
                 <Button text="Actualizar" onAction="#refrescarEventos"/>
-                <Button text="Ver detalle" onAction="#abrirDetalleSeleccionado"/>
             </HBox>
 
             <Separator/>
@@ -46,28 +45,17 @@
     </top>
 
     <center>
-        <TableView fx:id="tblEventos" prefHeight="350">
-            <columns>
-                <TableColumn fx:id="colNombre" text="Nombre" prefWidth="220"/>
-                <TableColumn fx:id="colCategoria" text="Categoría" prefWidth="130"/>
-                <TableColumn fx:id="colCiudad" text="Ciudad" prefWidth="140"/>
-                <TableColumn fx:id="colFecha" text="Fecha" prefWidth="160"/>
-                <TableColumn fx:id="colEstado" text="Estado" prefWidth="120"/>
-            </columns>
-        </TableView>
+        <!-- ScrollPane deslizable para navegar por la cuadrícula de tarjetas -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0;">
+            <content>
+                <!-- Rejilla dinámica donde se inyectarán las tarjetas creadas por tu compañera -->
+                <GridPane fx:id="gridEventos" hgap="20.0" vgap="20.0">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                </GridPane>
+            </content>
+        </ScrollPane>
     </center>
 
-    <bottom>
-        <VBox spacing="8" style="-fx-background-color: white;">
-            <padding>
-                <Insets top="16" right="16" bottom="16" left="16"/>
-            </padding>
-            <Label text="Detalle del evento" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            <Label fx:id="lblTituloDetalle" text="Selecciona un evento"/>
-            <Label fx:id="lblDescripcionDetalle" text="Aquí aparecerá la información del evento." wrapText="true"/>
-            <Label fx:id="lblRecintoDetalle" text="-"/>
-            <Label fx:id="lblFechaDetalle" text="-"/>
-            <Label fx:id="lblEstadoDetalle" text="-"/>
-        </VBox>
-    </bottom>
 </BorderPane>

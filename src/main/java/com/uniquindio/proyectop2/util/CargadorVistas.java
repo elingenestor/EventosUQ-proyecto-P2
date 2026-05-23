@@ -1,4 +1,4 @@
-package com.uniquindio.proyectop2.Util;
+package com.uniquindio.proyectop2.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
