@@ -180,14 +180,24 @@ public class GestionEventosControlador {
         txtNombre.setText(evento.getNombre());
         cbCategoria.setValue(evento.getCategoria());
         txtCiudad.setText(evento.getCiudad());
+
         if (evento.getFechaHora() != null) {
             dpFecha.setValue(evento.getFechaHora().toLocalDate());
             txtHora.setText(evento.getFechaHora().toLocalTime().toString());
+        } else {
+            dpFecha.setValue(null);
+            txtHora.clear();
         }
+
         cbEstado.setValue(evento.getEstado());
         txtDescripcion.setText(evento.getDescripcion());
         txtPoliticas.setText(evento.getPoliticasCancelacion());
-        cbRecinto.getSelectionModel().clearSelection();
+
+        if (evento.getRecinto() != null) {
+            cbRecinto.setValue(evento.getRecinto());
+        } else {
+            cbRecinto.getSelectionModel().clearSelection();
+        }
     }
 
     private void mostrarError(String mensaje) {
