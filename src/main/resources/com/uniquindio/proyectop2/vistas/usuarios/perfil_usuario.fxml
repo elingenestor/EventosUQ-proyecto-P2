@@ -36,12 +36,9 @@
 
     <Label text="Confirmar contraseña"/>
     <PasswordField fx:id="txtConfirmarPassword"/>
-
-    <Button fx:id="btnCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
-
     <Button text="Guardar cambios" onAction="#guardarCambios"/>
     <Button text="Métodos de pago" onAction="#abrirMetodosPago"/>
-    <Button text="Cerrar Sesión" onAction="#cerrarSesion"/>
+    <Button fx:id="btnCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
 
 
 

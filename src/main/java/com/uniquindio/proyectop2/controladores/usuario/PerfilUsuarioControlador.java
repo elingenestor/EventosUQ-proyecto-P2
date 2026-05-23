@@ -136,7 +136,7 @@ public class PerfilUsuarioControlador {
             // ABRIR LOGIN
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(
-                            "/com/uniquindio/proyectop2/vistas/principal/inicio.fxml"
+                            "/com/uniquindio/proyectop2/vistas/autenticacion/iniciar_sesion.fxml"
                     )
             );
 
