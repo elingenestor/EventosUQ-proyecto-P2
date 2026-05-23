@@ -5,6 +5,7 @@ import com.uniquindio.proyectop2.Model.Usuario;
 import com.uniquindio.proyectop2.dao.interfaces.MetodoPagoDAO;
 import com.uniquindio.proyectop2.dao.interfaces.UsuarioDAO;
 import com.uniquindio.proyectop2.service.interfaces.UsuarioService;
+import com.uniquindio.proyectop2.util.PasswordUtil;
 
 import java.util.List;
 
@@ -22,6 +23,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         this.metodoPagoDAO = metodoPagoDAO;
     }
 
+    private boolean emailValido(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        return email.matches(regex);
+    }
+
+
+
     @Override
     public void registrar(Usuario usuario) throws Exception {
         validarUsuario(usuario);
@@ -29,12 +37,16 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioDAO.existeEmail(usuario.getEmail())) {
             throw new Exception("El email ya está registrado.");
         }
+        usuario.setPassword(PasswordUtil.hashPassword(usuario.getPassword()));
 
         usuarioDAO.save(usuario);
     }
 
     @Override
     public Usuario login(String email, String password) throws Exception {
+
+        String passwordHash = PasswordUtil.hashPassword(password);
+
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             throw new Exception("Debes ingresar email y contraseña.");
         }
@@ -45,7 +57,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new Exception("Usuario no encontrado.");
         }
 
-        if (!usuario.getPassword().equals(password)) {
+        if (usuario.getPassword().equals(passwordHash)) {
             throw new Exception("Contraseña incorrecta.");
         }
 
@@ -54,10 +66,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void actualizarPerfil(Usuario usuario) throws Exception {
-        validarUsuario(usuario);
 
-        if (usuario.getIdUsuario() == null || usuario.getIdUsuario().isBlank()) {
-            throw new Exception("El usuario no tiene un ID válido.");
+        if(usuario.getNombreCompleto().isBlank() ||
+                usuario.getEmail().isBlank()) {
+
+            throw new Exception("Campos obligatorios");
+        }
+
+        // VALIDAR FORMATO EMAIL
+        if(!emailValido(usuario.getEmail())) {
+            throw new Exception("Correo inválido");
+        }
+
+        // VALIDAR EMAIL DUPLICADO
+        Usuario existente = usuarioDAO.findByEmail(usuario.getEmail());
+
+        if(existente != null &&
+                existente.getIdUsuario() != usuario.getIdUsuario()) {
+
+            throw new Exception(
+                    "Ya existe un usuario con ese correo"
+            );
         }
 
         usuarioDAO.update(usuario);
@@ -114,5 +143,40 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuario.getTelefono() == null || usuario.getTelefono().isBlank()) {
             throw new Exception("El teléfono es obligatorio.");
         }
+    }
+
+    @Override
+    public void actualizarPassword(Usuario usuario, String passwordActual, String nuevaPassword) throws Exception {
+
+        Usuario usuarioBD = usuarioDAO.findById(usuario.getIdUsuario());
+
+
+
+        if(usuarioBD == null) {
+            throw new Exception("Usuario no encontrado");
+        }
+
+        String passwordActualHash = PasswordUtil.hashPassword(passwordActual);
+
+        // VALIDAR PASSWORD ACTUAL
+        if(!usuarioBD.getPassword().equals(passwordActualHash)) {
+            throw new Exception(
+                    "La contraseña actual es incorrecta"
+            );
+        }
+
+        // VALIDAR NUEVA PASSWORD
+        if(nuevaPassword.length() < 8) {
+            throw new Exception(
+                    "La nueva contraseña debe tener mínimo 8 caracteres"
+            );
+        }
+
+        String nuevaPasswordHash =
+                PasswordUtil.hashPassword(nuevaPassword);
+
+
+        usuarioDAO.updatePassword(usuario.getIdUsuario(), nuevaPasswordHash
+        );
     }
 }

@@ -33,17 +33,29 @@
 -- CAMBIO: Se realiza el MERGE inyectando todas las columnas obligatorias juntas.
 -- MOTIVO: Evita la restricción de campos NOT NULL que provocaba el crash en H2.
 -- =========================================================================================
-MERGE INTO usuario (email, nombre_completo, telefono, password, es_admin)
-    KEY(email)
-    VALUES ('juan@email.com', 'Juan Pérez', '3001234567', 'password123', FALSE);
+INSERT INTO usuario (email, nombre_completo, telefono, password, es_administrador)
+VALUES ('juan@email.com', 'Juan Pérez', '3001234567', 'password123', FALSE)
+ON DUPLICATE KEY UPDATE
+                     nombre_completo = VALUES(nombre_completo),
+                     telefono = VALUES(telefono),
+                     password = VALUES(password),
+                     es_administrador = VALUES(es_administrador);
 
-MERGE INTO usuario (email, nombre_completo, telefono, password, es_admin)
-    KEY(email)
-    VALUES ('maria@email.com', 'María García', '3007654321', 'password123', FALSE);
+INSERT INTO usuario (email, nombre_completo,telefono, password, es_administrador)
+VALUES('andres@email.com','Andres Rodriguez', '31008881798', 'andres1234', FALSE)
+ON DUPLICATE KEY UPDATE
+                     nombre_completo = VALUES(nombre_completo),
+                     telefono = VALUES(telefono),
+                     password = VALUES(password),
+                     es_administrador = VALUES(es_administrador);
 
-MERGE INTO usuario (email, nombre_completo, telefono, password, es_admin)
-    KEY(email)
-    VALUES ('admin@eventos.com', 'Admin Sistema', '3000000000', 'admin123', TRUE);
+INSERT INTO usuario (email, nombre_completo,telefono, password, es_administrador)
+VALUES ('admin@eventos.com', 'Admin Sistema', ' 3000000000', 'admin123',TRUE)
+ON DUPLICATE KEY UPDATE
+                     nombre_completo = VALUES(nombre_completo),
+                     telefono = VALUES(telefono),
+                     password = VALUES(password),
+                     es_administrador = VALUES(es_administrador);
 
 
 -- =============================================================================

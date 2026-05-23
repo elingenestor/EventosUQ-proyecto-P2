@@ -17,7 +17,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, Integer.parseInt(id));
+            ps.setString(1, String.valueOf(Integer.parseInt(id)));
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -32,7 +32,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     }
 
     @Override
-    public Usuario findByEmail(String email) {
+    public Usuario findByEmail(String email) throws Exception {
+
         String sql = "SELECT * FROM usuario WHERE email = ?";
 
         try (Connection conn = ConexionBD.getInstance().getConnection();
@@ -40,13 +41,19 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
             ps.setString(1, email);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToUsuario(rs);
-                }
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return new Usuario(
+                        rs.getString("id_usuario"),
+                        rs.getString("nombre_completo"),
+                        rs.getString("email"),
+                        rs.getString("telefono"),
+                        rs.getString("password"),
+                        rs.getBoolean("es_admin")
+                );
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -160,5 +167,29 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         usuario.setPassword(rs.getString("password"));
         usuario.setAdmin(rs.getBoolean("es_admin"));
         return usuario;
+    }
+    @Override
+    public void updatePassword(
+            String usuarioId,
+            String nuevaPassword
+    ) throws Exception {
+
+        String sql = """
+        UPDATE usuario
+        SET password = ?
+        WHERE id = ?
+    """;
+
+        try(Connection conn =
+                    ConexionBD.getInstance().getConnection();
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql)) {
+
+            ps.setString(1, nuevaPassword);
+            ps.setString(2, usuarioId);
+
+            ps.executeUpdate();
+        }
     }
 }

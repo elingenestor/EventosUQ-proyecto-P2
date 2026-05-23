@@ -4,11 +4,17 @@ import com.uniquindio.proyectop2.Model.Usuario;
 import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.impl.UsuarioServiceImpl;
 import com.uniquindio.proyectop2.service.interfaces.UsuarioService;
+import com.uniquindio.proyectop2.util.SesionActual;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 
 public class PerfilUsuarioControlador {
 
@@ -16,11 +22,12 @@ public class PerfilUsuarioControlador {
     @FXML private TextField txtNombreCompleto;
     @FXML private TextField txtEmail;
     @FXML private TextField txtTelefono;
-    @FXML private PasswordField txtPassword;
+    @FXML private PasswordField txtPasswordActual;
+    @FXML private PasswordField txtNuevaPassword;
+    @FXML private PasswordField txtConfirmarPassword;
+    @FXML private Button btnCerrarSesion;
 
-    private final UsuarioService usuarioService = new UsuarioServiceImpl(
-            DAOFactory.obtenerUsuarioDAO(),
-            DAOFactory.obtenerMetodoPagoDAO()
+    private final UsuarioService usuarioService = new UsuarioServiceImpl(DAOFactory.obtenerUsuarioDAO(), DAOFactory.obtenerMetodoPagoDAO()
     );
 
     private Usuario usuarioActual;
@@ -55,7 +62,7 @@ public class PerfilUsuarioControlador {
             if (txtNombreCompleto != null) txtNombreCompleto.setText(usuarioActual.getNombreCompleto());
             if (txtEmail != null) txtEmail.setText(usuarioActual.getEmail());
             if (txtTelefono != null) txtTelefono.setText(usuarioActual.getTelefono());
-            if (txtPassword != null) txtPassword.setText(usuarioActual.getPassword());
+            if (txtPasswordActual != null) txtPasswordActual.setText(usuarioActual.getPassword());
         }
     }
 
@@ -65,12 +72,31 @@ public class PerfilUsuarioControlador {
             mostrarAlerta("Error", "No hay usuario cargado.");
             return;
         }
+        if (!txtNuevaPassword.getText().equals(txtConfirmarPassword.getText())) {
+
+            mostrarAlerta("Error", "Las contraseñas no coinciden");
+            return;
+        }
 
         usuarioActual.setNombreCompleto(txtNombreCompleto.getText());
         usuarioActual.setEmail(txtEmail.getText());
         usuarioActual.setTelefono(txtTelefono.getText());
-        usuarioActual.setPassword(txtPassword.getText());
+        usuarioActual.setPassword(txtPasswordActual.getText());
 
+        try {
+
+            usuarioService.actualizarPassword(
+                    usuarioActual,
+                    txtPasswordActual.getText(),
+                    txtNuevaPassword.getText()
+            );
+
+            mostrarInformacion("Contraseña actualizada","Contraseña actualizada");
+
+        } catch (Exception e) {
+
+            mostrarAlerta("Error al actualizar", "No se ha podido actualizar la contraseña");
+        }
         try {
             usuarioService.actualizarPerfil(usuarioActual);
             mostrarInformacion("Perfil actualizado", "Los cambios fueron guardados correctamente.");
@@ -98,5 +124,38 @@ public class PerfilUsuarioControlador {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    @FXML
+    private void cerrarSesion() {
+
+        try {
+
+            // LIMPIAR SESIÓN
+            SesionActual.cerrarSesion();
+
+            // ABRIR LOGIN
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/uniquindio/proyectop2/vistas/principal/inicio.fxml"
+                    )
+            );
+
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // CERRAR VENTANA ACTUAL
+            Stage actual = (Stage) btnCerrarSesion
+                    .getScene()
+                    .getWindow();
+
+            actual.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 }

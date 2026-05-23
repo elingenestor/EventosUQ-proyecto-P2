@@ -1,4 +1,4 @@
-package com.uniquindio.proyectop2.Util;
+package com.uniquindio.proyectop2.util;
 
 
 import java.time.LocalDate;

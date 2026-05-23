@@ -2,7 +2,6 @@ package com.uniquindio.proyectop2.controladores.principal;
 
 import com.uniquindio.proyectop2.Model.Usuario;
 import com.uniquindio.proyectop2.controladores.eventos.ListaEventosControlador;
-import com.uniquindio.proyectop2.controladores.principal.InicioControlador;
 import com.uniquindio.proyectop2.controladores.compras.MisComprasControlador;
 import com.uniquindio.proyectop2.controladores.usuario.PerfilUsuarioControlador;
 import com.uniquindio.proyectop2.util.SesionActual; // IMPORTAMOS EL SINGLETON

@@ -12,4 +12,5 @@ public interface UsuarioService {
     void actualizarPerfil(Usuario usuario) throws Exception;
     void agregarMetodoPago(Usuario usuario,MetodoPago metodoPago) throws Exception;
     List<MetodoPago> listarMetodosPago(Usuario usuario) throws Exception;
+    void actualizarPassword(Usuario usuario, String passwordActual, String nuevaPassword) throws Exception;
 }
