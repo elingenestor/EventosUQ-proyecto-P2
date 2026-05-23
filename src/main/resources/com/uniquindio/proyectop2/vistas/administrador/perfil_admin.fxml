@@ -31,13 +31,9 @@
     <PasswordField fx:id="txtConfirmarPassword"
                    promptText="Confirmar contraseña"/>
 
-    <Button text="Guardar Cambios"
-            onAction="#guardarCambios"/>
+    <Button text="Guardar Cambios" onAction="#guardarCambios"/>
 
-    <Button text="Volver"
-            onAction="#volver"/>
-
-    <Button text="Cerrar Sesión"
-            onAction="#cerrarSesion"/>
+    <Button fx:id="Volver" text="Volver" onAction="#volver"/>
+    <Button fx:id="btnCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
 
 </VBox>

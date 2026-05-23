@@ -190,34 +190,34 @@ public class PerfilAdminControlador {
 
         try {
 
+            // LIMPIAR SESIÓN
             SesionActual.cerrarSesion();
 
-            FXMLLoader loader =
-                    new FXMLLoader(
-                            getClass().getResource(
-                                    "/com/uniquindio/proyectop2/vistas/autenticacion/iniciar_sesion.fxml"
-                            )
-                    );
+            // ABRIR LOGIN
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/uniquindio/proyectop2/vistas/autenticacion/iniciar_sesion.fxml"
+                    )
+            );
 
             Parent root = loader.load();
 
-            Stage stage =
-                    (Stage) btnCerrarSesion
-                            .getScene()
-                            .getWindow();
-
-            stage.setScene(
-                    new Scene(root)
-            );
-
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
             stage.show();
+
+            // CERRAR VENTANA ACTUAL
+            Stage actual = (Stage) btnCerrarSesion
+                    .getScene()
+                    .getWindow();
+
+            actual.close();
 
         } catch (Exception e) {
 
             e.printStackTrace();
         }
     }
-
     private void mostrarAlerta(
             String titulo,
             String mensaje
