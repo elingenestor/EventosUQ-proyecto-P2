@@ -3,12 +3,16 @@ package com.uniquindio.proyectop2.controladores.administrador;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class PanelAdministradorControlador {
 
     @FXML
     private StackPane contenedorPrincipal;
+    @FXML private Button btnPerfil;
 
     @FXML
     private void initialize() {
@@ -41,6 +45,34 @@ public class PanelAdministradorControlador {
             contenedorPrincipal.getChildren().setAll(vista);
         } catch (Exception e) {
             throw new RuntimeException("No se pudo cargar la vista: " + recurso, e);
+        }
+    }
+    @FXML
+    private void abrirPerfil() {
+
+        try {
+
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass().getResource(
+                                    "/com/uniquindio/proyectop2/vistas/administrador/perfil_admin.fxml"
+                            )
+                    );
+
+            Parent root = loader.load();
+
+            Stage stage =
+                    (Stage) btnPerfil
+                            .getScene()
+                            .getWindow();
+
+            stage.setScene(new Scene(root));
+
+            stage.show();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
 }

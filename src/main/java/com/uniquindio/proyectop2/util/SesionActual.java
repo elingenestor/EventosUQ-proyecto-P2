@@ -17,12 +17,12 @@ public final class SesionActual {
         return instance;
     }
 
-    public Usuario getUsuarioActual() {
+    public static Usuario getUsuarioActual() {
         return usuarioActual;
     }
 
-    public void setUsuarioActual(Usuario usuarioActual) {
-        this.usuarioActual = usuarioActual;
+    public static void setUsuarioActual(Usuario usuarioActual) {
+        usuarioActual = usuarioActual;
     }
 
     public boolean haySesionActiva() {

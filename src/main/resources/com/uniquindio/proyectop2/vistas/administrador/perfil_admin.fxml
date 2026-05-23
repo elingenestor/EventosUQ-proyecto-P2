@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10"
+      alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.uniquindio.proyectop2.controladores.administrador.PerfilAdminControlador">
+
+    <Label text="Mi Perfil Administrador"/>
+
+    <TextField fx:id="txtNombre"
+               promptText="Nombre"/>
+
+    <TextField fx:id="txtEmail"
+               promptText="Correo"/>
+
+    <TextField fx:id="txtTelefono"
+               promptText="Teléfono"/>
+
+    <PasswordField fx:id="txtPasswordActual"
+                   promptText="Contraseña actual"/>
+
+    <PasswordField fx:id="txtNuevaPassword"
+                   promptText="Nueva contraseña"/>
+
+    <PasswordField fx:id="txtConfirmarPassword"
+                   promptText="Confirmar contraseña"/>
+
+    <Button text="Guardar Cambios"
+            onAction="#guardarCambios"/>
+
+    <Button text="Volver"
+            onAction="#volver"/>
+
+    <Button text="Cerrar Sesión"
+            onAction="#cerrarSesion"/>
+
+</VBox>

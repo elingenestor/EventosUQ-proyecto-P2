@@ -28,6 +28,7 @@
                 <Button text="Gestión de eventos" maxWidth="Infinity" onAction="#cargarVistaEventos"/>
                 <Button text="Gestión de recintos" maxWidth="Infinity" onAction="#cargarVistaRecintos"/>
                 <Button text="Reportes" maxWidth="Infinity" onAction="#cargarVistaReportes"/>
+                <Button fx:id="btnPerfil" text="Mi Perfil" onAction="#abrirPerfil"/>
             </children>
             <padding>
                 <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
