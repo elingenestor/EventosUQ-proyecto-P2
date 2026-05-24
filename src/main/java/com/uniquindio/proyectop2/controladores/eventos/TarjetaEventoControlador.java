@@ -60,34 +60,32 @@ public class TarjetaEventoControlador {
         System.out.println("=================================================");
 
         try {
-            // 1. Cargamos tu vista FXML donde el usuario selecciona asientos/boletas
-            // NOTA: Asegúrate de cambiar la ruta de abajo por el nombre real de tu FXML de compras
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/un..iquindio/proyectop2/vistas/eventos/detalle_evento.fxml"));
+            // 1. Cargamos el FXML de tu módulo de compras con la ruta exacta
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/compras/seleccion_asientos.fxml"));
             javafx.scene.Parent root = loader.load();
 
-            // 2. Obtenemos el controlador de tu pantalla de compras para inyectarle los datos
-            // NOTA: Cambia 'DetalleEventoControlador' por el nombre de la clase controladora de tu vista de compras
-            DetalleEventoControlador controladorCompra = loader.getController();
-            if (controladorCompra != null) {
-                controladorCompra.setUsuario(usuario);
-                controladorCompra.inicializar(evento); // O el método que uses para pasarle el evento
+            // 2. Vinculación perfecta enviando los dos objetos en un solo método
+            com.uniquindio.proyectop2.controladores.compras.SeleccionAsientosControlador controladorAsientos = loader.getController();
+            if (controladorAsientos != null) {
+                // Pasamos los dos parámetros juntos tal cual lo programaron en la firma del método
+                controladorAsientos.inicializar(usuario, evento);
             }
 
-            // 3. Levantamos la ventana de manera Modal (Bloquea la de atrás hasta que compre o cierre)
+            // 3. Lanzamos la pantalla de selección de asientos de forma modal
             javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("Proceso de Compra - " + evento.getNombre());
+            stage.setTitle("Selección de Asientos - " + evento.getNombre());
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
             stage.setScene(new javafx.scene.Scene(root));
             stage.showAndWait();
 
         } catch (IOException e) {
-            System.err.println("Error al abrir la ventana de compras: " + e.getMessage());
+            System.err.println("Error crítico al abrir seleccion_asientos.fxml: " + e.getMessage());
             e.printStackTrace();
 
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
             alert.setTitle("Error de Navegación");
-            alert.setHeaderText("No se pudo abrir la pasarela de compra");
-            alert.setContentText("Verifica las rutas de las vistas FXML.");
+            alert.setHeaderText("No se pudo abrir la selección de asientos");
+            alert.setContentText("Verifica las rutas de las vistas FXML.\nDetalle: " + e.getMessage());
             alert.showAndWait();
         }
     }
