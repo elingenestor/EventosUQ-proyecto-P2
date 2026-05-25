@@ -42,41 +42,73 @@ public class GestionReportesControlador {
 
     private void ejecutarReporte(int tipo) {
         try {
-            String ruta = txtRutaArchivo.getText();
-            if (ruta == null || ruta.trim().isEmpty()) {
-                mostrarError("Debes indicar una ruta de archivo");
-                return;
-            }
-
+            // === PASO A: VALIDACIÓN PREVIA DE DATOS OBLIGATORIOS ===
             LocalDate inicio = dpInicio.getValue();
             LocalDate fin = dpFin.getValue();
 
+            // Validar fechas para los reportes de ventas y servicios adicionales
             if (tipo == 1 || tipo == 3) {
                 if (inicio == null || fin == null) {
-                    mostrarError("Debes seleccionar fecha inicial y final");
+                    mostrarError("Debes seleccionar obligatoriamente la fecha inicial y final antes de exportar.");
+                    return;
+                }
+                if (inicio.isAfter(fin)) {
+                    mostrarError("La fecha de inicio no puede ser posterior a la fecha fin.");
                     return;
                 }
             }
 
-            if (tipo == 1) {
-                reporteService.generarReporteVentasCSV(inicio, fin, ruta);
-                mostrarInfo("Reporte de ventas generado");
-            } else if (tipo == 2) {
-                String idEvento = txtIdEvento.getText();
+            // Validar ID del evento para el reporte de ocupación
+            String idEvento = "";
+            if (tipo == 2) {
+                idEvento = txtIdEvento.getText();
                 if (idEvento == null || idEvento.trim().isEmpty()) {
-                    mostrarError("Debes indicar el ID del evento");
+                    mostrarError("Debes indicar el ID del evento antes de generar el reporte de ocupación.");
                     return;
                 }
+            }
+
+            // === PASO B: CONFIGURACIÓN DEL SELECTOR DE ARCHIVOS ===
+            javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+            fileChooser.setTitle("Seleccionar ubicación para guardar el reporte");
+
+            if (tipo == 1) {
+                fileChooser.setInitialFileName("reporte_ventas.csv");
+                fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Archivos CSV (*.csv)", "*.csv"));
+            } else if (tipo == 2) {
+                fileChooser.setInitialFileName("reporte_ocupacion.pdf");
+                fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Documento PDF (*.pdf)", "*.pdf"));
+            } else {
+                fileChooser.setInitialFileName("reporte_ingresos_servicios.csv");
+                fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Archivos CSV (*.csv)", "*.csv"));
+            }
+
+            // === PASO C: ABRIR EXPLORADOR DE WINDOWS ===
+            javafx.stage.Stage stage = (javafx.stage.Stage) dpInicio.getScene().getWindow();
+            java.io.File archivoSeleccionado = fileChooser.showSaveDialog(stage);
+
+            if (archivoSeleccionado == null) {
+                return; // El usuario canceló la ventana del explorador
+            }
+
+            String ruta = archivoSeleccionado.getAbsolutePath();
+
+            // === PASO D: EJECUCIÓN DEL REPORTE ===
+            if (tipo == 1) {
+                reporteService.generarReporteVentasCSV(inicio, fin, ruta);
+                mostrarInfo("Reporte de ventas generado exitosamente.");
+            } else if (tipo == 2) {
                 reporteService.generarReporteOcupacionPDF(idEvento, ruta);
-                mostrarInfo("Reporte de ocupación generado");
+                mostrarInfo("Reporte de ocupación generado exitosamente.");
             } else {
                 reporteService.generarReporteIngresosServiciosCSV(inicio, fin, ruta);
-                mostrarInfo("Reporte de ingresos de servicios generado");
+                mostrarInfo("Reporte de ingresos de servicios generado exitosamente.");
             }
         } catch (Exception e) {
-            mostrarError(e.getMessage());
+            mostrarError("Ocurrió un error al procesar el reporte: " + e.getMessage());
         }
     }
+
 
     private void mostrarInfo(String mensaje) {
         if (lblEstado != null) {

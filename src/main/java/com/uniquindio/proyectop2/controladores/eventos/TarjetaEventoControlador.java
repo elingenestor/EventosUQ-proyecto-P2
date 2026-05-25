@@ -75,7 +75,11 @@ public class TarjetaEventoControlador {
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Selección de Asientos - " + evento.getNombre());
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            stage.setScene(new javafx.scene.Scene(root));
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(
+                    getClass().getResource("/estilos/estilos.css").toExternalForm()
+            );
+            stage.setScene(scene);
             stage.showAndWait();
 
         } catch (IOException e) {

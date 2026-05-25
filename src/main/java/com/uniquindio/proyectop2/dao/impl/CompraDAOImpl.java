@@ -228,4 +228,20 @@ public class CompraDAOImpl implements CompraDAO {
         }
         return servicio;
     }
+    @Override
+    public List<Compra> findAll() {
+        List<Compra> compras = new ArrayList<>();
+        String sql = "SELECT * FROM compra ORDER BY fecha_creacion DESC";
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                compras.add(map(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return compras;
+    }
+
 }

@@ -14,4 +14,7 @@ public interface CompraDAO {
 
     void saveServicioCompra(String idCompra, String idServicio);
     List<ServicioAdicional> findServiciosByCompra(String idCompra);
+
+    // AGREGA ESTA LÍNEA AQUÍ: Permite al administrador obtener todas las compras del sistema
+    List<Compra> findAll();
 }
