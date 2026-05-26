@@ -99,7 +99,6 @@ public class Compra implements ComponenteCompra, Observable {
 
     public void setEstadoCompraState(EstadoCompraState nuevoEstado) {
         this.estadoCompraState = nuevoEstado;
-        // Sincronizar el enum con el nuevo estado (opcional pero recomendado)
         if (nuevoEstado instanceof EstadoCreada) {
             this.estado = EstadoCompra.CREADA;
         } else if (nuevoEstado instanceof EstadoPagada) {
@@ -147,7 +146,6 @@ public class Compra implements ComponenteCompra, Observable {
         }
     }
 
-    // ========== Métodos de negocio que delegan en el estado ==========
     public void pagar() throws Exception {
         estadoCompraState.pagar(this);
     }

@@ -42,11 +42,8 @@
                 <Label text="Ciudad" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
                 <TextField fx:id="txtCiudad" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
             </children>
-            <!-- ... debajo de la caja de texto txtCiudad en el GridPane ... -->
         </GridPane>
 
-
-        <!-- PANEL NUEVO PARA AGREGAR LAS ZONAS DE FORMA DINÁMICA -->
         <VBox spacing="8.0" style="-fx-border-color: #cccccc; -fx-border-width: 1px; -fx-padding: 10px;">
             <children>
                 <Label text="Configuración de Localidades / Zonas" style="-fx-font-weight: bold;"/>
@@ -59,7 +56,6 @@
                     </children>
                 </HBox>
 
-                <!-- LISTA VISUAL CORREGIDA Y TIPADA PARA EVITAR EL CRASH -->
                 <ListView fx:id="listaZonasVisuales" prefHeight="100.0">
                     <placeholder>
                         <Label text="No hay zonas añadidas todavía." />

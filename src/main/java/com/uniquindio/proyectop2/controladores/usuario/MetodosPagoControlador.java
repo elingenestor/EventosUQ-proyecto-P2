@@ -40,7 +40,6 @@ public class MetodosPagoControlador {
 
     @FXML
     private void initialize() {
-        // 👇 CORREGIDO: Usamos tu nuevo Singleton seguro
         usuarioActual = SesionActual.getInstance().getUsuarioActual();
 
         colId.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("idMetodoPago"));
@@ -142,7 +141,6 @@ public class MetodosPagoControlador {
 
     public static void abrirVentana(Usuario usuario) {
         try {
-            // 👇 CORREGIDO: Usamos tu nuevo Singleton seguro para mantener la ventana sincronizada
             SesionActual.getInstance().setUsuarioActual(usuario);
 
             FXMLLoader loader = new FXMLLoader(

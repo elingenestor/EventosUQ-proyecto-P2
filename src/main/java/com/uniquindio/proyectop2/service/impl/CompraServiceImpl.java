@@ -103,7 +103,6 @@ public class CompraServiceImpl implements com.uniquindio.proyectop2.service.inte
             throw new Exception("Debes seleccionar al menos un asiento.");
         }
 
-        // Validar que no haya asientos repetidos en la nueva selección
         Set<String> asientosVistos = new HashSet<>();
         for (Asiento asiento : nuevosAsientos) {
             if (asiento == null || asiento.getIdAsiento() == null) {
@@ -122,7 +121,6 @@ public class CompraServiceImpl implements com.uniquindio.proyectop2.service.inte
             }
         }
 
-        // Validar disponibilidad antes de tocar la compra anterior
         List<Asiento> asientosValidados = new ArrayList<>();
         for (Asiento asiento : nuevosAsientos) {
             Asiento asientoBD = asientoDAO.findById(asiento.getIdAsiento());
@@ -153,7 +151,6 @@ public class CompraServiceImpl implements com.uniquindio.proyectop2.service.inte
             }
         }
 
-        // Liberar asientos anteriores y eliminar sus entradas
         for (Entrada entrada : entradasAnteriores) {
             if (entrada.getAsiento() != null && entrada.getAsiento().getIdAsiento() != null) {
                 asientoDAO.cambiarEstado(entrada.getAsiento().getIdAsiento(), EstadoAsiento.DISPONIBLE);
@@ -163,7 +160,6 @@ public class CompraServiceImpl implements com.uniquindio.proyectop2.service.inte
             }
         }
 
-        // Reservar los nuevos asientos y crear nuevas entradas
         List<Entrada> nuevasEntradas = new ArrayList<>();
         for (Asiento asientoBD : asientosValidados) {
             asientoDAO.cambiarEstado(asientoBD.getIdAsiento(), EstadoAsiento.RESERVADO);

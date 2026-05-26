@@ -4,7 +4,6 @@ import com.uniquindio.proyectop2.Enums.TipoIncidencia;
 
 import java.time.LocalDateTime;
 
-
 public class Incidencia {
     private String idIncidencia;
     private TipoIncidencia tipo;
@@ -25,9 +24,6 @@ public class Incidencia {
         this.descripcion = descripcion;
         this.entidadAfectada = entidadAfectada;
     }
-
-    //getter y setter
-
 
     public String getIdIncidencia() {
         return idIncidencia;

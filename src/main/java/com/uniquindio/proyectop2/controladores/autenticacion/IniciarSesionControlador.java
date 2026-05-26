@@ -40,18 +40,13 @@ public class IniciarSesionControlador {
         }
 
         try {
-            // 1. Autenticamos el usuario con tu servicio robusto
             Usuario usuario = usuarioService.login(correo, contrasena);
 
-            // 2. Encendemos tu nuevo Singleton seguro y Thread-Safe
             SesionActual.getInstance().setUsuarioActual(usuario);
 
-            // 3. Ruteo inteligente por Roles usando la nueva variable 'admin'
             if (usuario.isAdmin()) {
-                // Si es Admin, lo mandamos a la vista de administración
                 abrirVentana("/com/uniquindio/proyectop2/vistas/administrador/panel_administrador.fxml", "Panel Administrador - Eventos UQ");
             } else {
-                // Si es Cliente común, lo mandamos a tu ventana principal unificada
                 abrirVentana("/com/uniquindio/proyectop2/vistas/principal/ventana_principal.fxml", "Eventos UQ - Panel Principal");
             }
 
@@ -73,18 +68,12 @@ public class IniciarSesionControlador {
         }
     }
 
-    /**
-     * Método de utilidad interno para cambiar de ventana limpiamente sin repetir código largo
-     */
     private void abrirVentana(String rutaFXML, String titulo) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
         Parent root = loader.load();
 
-        // Ya no necesitas inyectar el usuario manualmente aquí.
-        // Al cargar la ventana, ella sola tomará los datos de SesionActual.getInstance()
-
         Stage stage = (Stage) txtCorreo.getScene().getWindow();
-        stage.setScene(new Scene(root)); // Ajuste de tamaño automático
+        stage.setScene(new Scene(root));
         stage.setTitle(titulo);
         stage.centerOnScreen();
     }

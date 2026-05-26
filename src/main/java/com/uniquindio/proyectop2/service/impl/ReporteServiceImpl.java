@@ -2,7 +2,6 @@ package com.uniquindio.proyectop2.service.impl;
 
 import com.uniquindio.proyectop2.patterns.Creational.singleton.GestorReportes;
 import com.uniquindio.proyectop2.service.interfaces.ReporteService;
-
 import java.time.LocalDate;
 
 public class ReporteServiceImpl implements ReporteService {

@@ -12,28 +12,23 @@
             style="-fx-background-color: #f8fafc;">
 
     <top>
-        <!-- Barra superior azul oscuro con espaciado amplio -->
         <HBox spacing="20" style="-fx-background-color: #0f172a;" alignment="CENTER_LEFT">
             <padding>
                 <Insets top="15" right="20" bottom="15" left="20"/>
             </padding>
 
-            <!-- ID clave para personalizar el nombre del usuario conectado -->
             <Label fx:id="lblBienvenida" text="Bienvenido(a)" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
 
-            <!-- Botones de navegación principal -->
             <Button text="Inicio" onAction="#mostrarInicio"/>
             <Button text="Eventos" onAction="#mostrarEventos"/>
             <Button text="Compras" onAction="#mostrarCompras"/>
             <Button text="Perfil" onAction="#mostrarPerfil"/>
 
-            <!-- ID clave para mostrar el título de la sección activa -->
             <Label fx:id="lblTituloSeccion" text="Inicio" style="-fx-text-fill: #94a3b8; -fx-font-size: 16px; -fx-font-weight: bold;"/>
         </HBox>
     </top>
 
     <center>
-        <!-- Espacio en blanco inicial. El controlador se encargará de inyectar la vista de inicio aquí inmediatamente -->
     </center>
 
 </BorderPane>

@@ -12,12 +12,10 @@ import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 
 public class CancelacionAntesDePagoStrategy implements PoliticaCancelacion {
 
-    // 1. Definir las variables de instancia para los DAO
     private final CompraDAO compraDAO;
     private final EntradaDAO entradaDAO;
     private final AsientoDAO asientoDAO;
 
-    // 2. Crear el constructor para inicializar los DAO usando tu DAOFactory
     public CancelacionAntesDePagoStrategy() {
         this.compraDAO = DAOFactory.crearCompraDAO();
         this.entradaDAO = DAOFactory.crearEntradaDAO();
@@ -32,20 +30,16 @@ public class CancelacionAntesDePagoStrategy implements PoliticaCancelacion {
 
         for (Entrada entrada : compra.getEntradas()) {
             if (entrada.getAsiento() != null) {
-                // CORRECTO: Se usan las variables de instancia en minúscula
                 this.asientoDAO.cambiarEstado(entrada.getAsiento().getIdAsiento(), EstadoAsiento.DISPONIBLE);
             }
 
             entrada.setEstadoEntrada(EstadoEntrada.ANULADA);
 
-            // CORRECTO: Se usan las variables de instancia en minúscula
             this.entradaDAO.update(entrada);
         }
 
-        // 3. Cambiar estado de la compra
         compra.setEstado(EstadoCompra.CANCELADA);
 
-        // CORRECTO: Se usan las variables de instancia en minúscula
         this.compraDAO.update(compra);
     }
 }

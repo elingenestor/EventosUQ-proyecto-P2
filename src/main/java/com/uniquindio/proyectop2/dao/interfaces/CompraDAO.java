@@ -14,4 +14,6 @@ public interface CompraDAO {
 
     void saveServicioCompra(String idCompra, String idServicio);
     List<ServicioAdicional> findServiciosByCompra(String idCompra);
+
+    List<Compra> findAll();
 }

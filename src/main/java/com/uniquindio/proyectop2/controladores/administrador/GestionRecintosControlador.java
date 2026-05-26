@@ -25,17 +25,14 @@ public class GestionRecintosControlador {
     @FXML private TextField txtDireccion;
     @FXML private TextField txtCiudad;
 
-    // 🌟 ENLAZAMOS LOS COMPONENTES NUEVOS DE TU FXML
     @FXML private TextField txtNombreZona;
     @FXML private TextField txtCapacidadZona;
     @FXML private TextField txtPrecioZona;
     @FXML private ListView<String> listaZonasVisuales;
 
-    // Respetamos tu patrón Factory y tu capa de servicios original
     private final AdminService adminService = DAOFactory.getAdminService();
     private final ObservableList<Recinto> recintos = FXCollections.observableArrayList();
 
-    // Lista temporal en memoria para ir acumulando las zonas antes de empaquetar el Recinto
     private final ArrayList<Zona> zonasTemporales = new ArrayList<>();
 
     @FXML
@@ -53,7 +50,6 @@ public class GestionRecintosControlador {
                 txtDireccion.setText(seleccionado.getDireccion());
                 txtCiudad.setText(seleccionado.getCiudad());
 
-                // Al seleccionar uno existente limpiamos el creador de zonas dinámicas
                 listaZonasVisuales.getItems().clear();
                 zonasTemporales.clear();
             }
@@ -70,7 +66,6 @@ public class GestionRecintosControlador {
         }
     }
 
-    // 🌟 NUEVA ACCIÓN: Recibe el clic del botón "Añadir Zona" de tu FXML
     @FXML
     private void agregarZonaAListaTemporal() {
         try {
@@ -86,7 +81,6 @@ public class GestionRecintosControlador {
             int capacidad = Integer.parseInt(capacidadStr);
             double precioBase = Double.parseDouble(precioStr);
 
-            // Estructuramos la zona usando tu atributo 'precioBase'
             Zona nuevaZona = new Zona();
             nuevaZona.setNombre(nombreZ);
             nuevaZona.setCapacidad(capacidad);
@@ -94,10 +88,8 @@ public class GestionRecintosControlador {
 
             zonasTemporales.add(nuevaZona);
 
-            // Lo reflejamos estéticamente en la lista de la pantalla
             listaZonasVisuales.getItems().add(nombreZ + " (Capacidad: " + capacidad + " | Precio: $" + precioBase + ")");
 
-            // Limpiamos los subcampos para permitir ingresar otra localidad
             txtNombreZona.clear();
             txtCapacidadZona.clear();
             txtPrecioZona.clear();
@@ -124,7 +116,7 @@ public class GestionRecintosControlador {
             recinto.setNombre(nombre);
             recinto.setDireccion(direccion);
             recinto.setCiudad(ciudad);
-            recinto.setZonas(zonasTemporales); // 🌟 Le inyectamos la lista de zonas asociadas
+            recinto.setZonas(zonasTemporales);
 
             if (recinto.getIdRecinto() == null || recinto.getIdRecinto().trim().isEmpty()) {
                 if (zonasTemporales.isEmpty()) {

@@ -20,7 +20,7 @@ public class Evento implements Observable {
     private EstadoEvento estado;
     private String politicasCancelacion;
     private Recinto recinto;
-    private List<Zona> zonas; //Es una copia de la zona con precios especificos
+    private List<Zona> zonas;
     private List<Compra> compras;
     private List<Observer> observers;
 
@@ -29,8 +29,6 @@ public class Evento implements Observable {
         this.compras = new ArrayList<>();
         this.observers = new ArrayList<>();
     }
-
-    //GETTERS Y SETTER
 
     public String getIdEvento() {
         return idEvento;
@@ -128,7 +126,6 @@ public class Evento implements Observable {
         this.observers = observers;
     }
 
-    //Metodos del patron observer
     @Override
     public void agregarObserver (Observer observer) {
         observers.add(observer);

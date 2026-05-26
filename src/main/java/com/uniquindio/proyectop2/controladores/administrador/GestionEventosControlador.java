@@ -39,7 +39,6 @@ public class GestionEventosControlador {
     @FXML private TextArea txtDescripcion;
     @FXML private TextArea txtPoliticas;
 
-    // CONSTRUCTOR ADAPTADO CON LOS DOS DAOS EXIGIDOS
     private final EventoService eventoService =
             new EventoServiceImpl(DAOFactory.crearEventoDAO(), DAOFactory.crearAsientoDAO());
 
@@ -76,11 +75,16 @@ public class GestionEventosControlador {
     @FXML
     private void cargarEventos() {
         try {
-            eventos.setAll(eventoService.listarEventosDisponibles(null, null, null, null));
+            com.uniquindio.proyectop2.dao.interfaces.EventoDAO miEventoDAO =
+                    com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory.crearEventoDAO();
+
+            eventos.setAll(miEventoDAO.findAll());
         } catch (Exception e) {
-            mostrarError(e.getMessage());
+            mostrarError("Error al cargar eventos: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     private void nuevoEvento() {
@@ -106,7 +110,6 @@ public class GestionEventosControlador {
         }
     }
 
-    // ACCIÓN CAMBIADA A CANCELAR EVENTO CONTROLADO
     @FXML
     private void cancelarEvento() {
         try {
@@ -168,26 +171,34 @@ public class GestionEventosControlador {
         evento.setEstado(cbEstado.getValue());
         evento.setDescripcion(txtDescripcion.getText() != null ? txtDescripcion.getText().trim() : "");
         evento.setPoliticasCancelacion(txtPoliticas.getText() != null ? txtPoliticas.getText().trim() : "");
-
         evento.setRecinto(cbRecinto.getValue());
 
         return evento;
     }
-
 
     private void mostrarEventoSeleccionado(Evento evento) {
         txtId.setText(evento.getIdEvento());
         txtNombre.setText(evento.getNombre());
         cbCategoria.setValue(evento.getCategoria());
         txtCiudad.setText(evento.getCiudad());
+
         if (evento.getFechaHora() != null) {
             dpFecha.setValue(evento.getFechaHora().toLocalDate());
             txtHora.setText(evento.getFechaHora().toLocalTime().toString());
+        } else {
+            dpFecha.setValue(null);
+            txtHora.clear();
         }
+
         cbEstado.setValue(evento.getEstado());
         txtDescripcion.setText(evento.getDescripcion());
         txtPoliticas.setText(evento.getPoliticasCancelacion());
-        cbRecinto.getSelectionModel().clearSelection();
+
+        if (evento.getRecinto() != null) {
+            cbRecinto.setValue(evento.getRecinto());
+        } else {
+            cbRecinto.getSelectionModel().clearSelection();
+        }
     }
 
     private void mostrarError(String mensaje) {

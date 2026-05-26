@@ -25,9 +25,6 @@ public class PerfilUsuarioControlador {
 
     private Usuario usuarioActual;
 
-    /**
-     * PASO 1: El receptor manual del usuario conectado
-     */
     public void setUsuario(Usuario usuario) {
         this.usuarioActual = usuario;
 
@@ -36,17 +33,11 @@ public class PerfilUsuarioControlador {
         }
     }
 
-    /**
-     * PASO 2: Deja el initialize limpio para evitar la alerta automática
-     */
     @FXML
     private void initialize() {
         // No cargamos nada al arrancar de forma ciega
     }
 
-    /**
-     * PASO 3: Método auxiliar para pintar la interfaz
-     */
     private void cargarDatosEnPantalla() {
         if (usuarioActual != null) {
             if (lblIdUsuario != null) {

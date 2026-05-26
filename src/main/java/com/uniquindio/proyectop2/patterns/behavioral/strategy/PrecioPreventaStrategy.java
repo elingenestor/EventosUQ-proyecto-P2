@@ -16,7 +16,6 @@ public class PrecioPreventaStrategy implements CalculadoraPrecio{
     @Override
     public double calcularPrecio(Entrada entrada, Object contexto) {
         double precioBase = entrada.getZona().getPrecioBase();
-        // Suponiendo que contexto podría ser la fecha actual
         LocalDateTime ahora = LocalDateTime.now();
         if (ahora.isBefore(fechaLimite)) {
             return precioBase * (1 - descuento);

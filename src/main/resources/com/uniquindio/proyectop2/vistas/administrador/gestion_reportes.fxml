@@ -27,9 +27,6 @@
 
                 <Label text="ID evento" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                 <TextField fx:id="txtIdEvento" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-
-                <Label text="Ruta archivo" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <TextField fx:id="txtRutaArchivo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
             </children>
         </GridPane>
         <HBox spacing="10.0">

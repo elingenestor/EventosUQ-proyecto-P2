@@ -26,15 +26,12 @@ public class VentanaPrincipalControlador {
 
     @FXML
     private void initialize() {
-        // 1. Obtenemos el usuario directamente del Singleton de forma segura
         Usuario usuarioLogueado = SesionActual.getInstance().getUsuarioActual();
 
-        // 2. Colocamos el texto de bienvenida de inmediato
         if (lblBienvenida != null && usuarioLogueado != null) {
             lblBienvenida.setText("Bienvenido(a), " + usuarioLogueado.getNombreCompleto());
         }
 
-        // 3. Cargamos la vista inicial (ahora sí llevará el usuario correctamente)
         mostrarInicio();
     }
 
@@ -71,7 +68,6 @@ public class VentanaPrincipalControlador {
                 lblTituloSeccion.setText(titulo);
             }
 
-            // 4. Recuperamos el usuario del Singleton para inyectarlo en las sub-vistas
             Usuario usuarioLogueado = SesionActual.getInstance().getUsuarioActual();
             Object controladorDestino = loader.getController();
 

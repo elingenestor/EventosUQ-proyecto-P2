@@ -63,6 +63,7 @@ public class ConfirmarCompraControlador {
             protected void updateItem(ServicioAdicional item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null : item.getNombre() + " ($" + item.getPrecio() + ")");
+                setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #12122a;");
             }
         });
 
@@ -82,6 +83,8 @@ public class ConfirmarCompraControlador {
         });
 
         lstServicios.getSelectionModel().getSelectedItems().addListener((javafx.collections.ListChangeListener<ServicioAdicional>) c -> actualizarTotal());
+        tblAsientos.setStyle("-fx-background-color: #12122a; -fx-control-inner-background: #12122a;");
+        tblAsientos.setStyle("-fx-background-color: #12122a; -fx-control-inner-background: #12122a;");
     }
 
     public void inicializar(Usuario usuario, Evento evento, List<Asiento> asientos) {

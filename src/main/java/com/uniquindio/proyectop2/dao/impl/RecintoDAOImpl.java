@@ -72,9 +72,8 @@ public class RecintoDAOImpl implements RecintoDAO {
         Connection conn = null;
         try {
             conn = ConexionBD.getInstance().getConnection();
-            conn.setAutoCommit(false); // 🌟 Iniciamos una transacción segura
+            conn.setAutoCommit(false);
 
-            // 1. GUARDAMOS EL RECINTO
             try (PreparedStatement psRecinto = conn.prepareStatement(sqlRecinto, Statement.RETURN_GENERATED_KEYS)) {
                 psRecinto.setString(1, recinto.getNombre());
                 psRecinto.setString(2, recinto.getDireccion());
@@ -87,7 +86,6 @@ public class RecintoDAOImpl implements RecintoDAO {
                 }
             }
 
-            // 2. RECORREMOS Y GUARDAMOS LAS ZONAS DE ESTE RECINTO
             for (com.uniquindio.proyectop2.Model.Zona zona : recinto.getZonas()) {
                 int idZonaGenerada = 0;
                 try (PreparedStatement psZona = conn.prepareStatement(sqlZona, Statement.RETURN_GENERATED_KEYS)) {
@@ -103,7 +101,6 @@ public class RecintoDAOImpl implements RecintoDAO {
                     }
                 }
 
-                // 3. 🚀 GENERACIÓN MATEMÁTICA CORREGIDA DE SILLAS
                 try (PreparedStatement psAsiento = conn.prepareStatement(sqlAsiento)) {
                     int asientosPorFila = 10;
 
@@ -112,9 +109,9 @@ public class RecintoDAOImpl implements RecintoDAO {
                         String fila = String.valueOf(letraFila);
                         int numeroSilla = ((i - 1) % asientosPorFila) + 1;
 
-                        psAsiento.setString(1, fila);        // Parámetro 1
-                        psAsiento.setInt(2, numeroSilla);    // Parámetro 2
-                        psAsiento.setInt(3, idZonaGenerada); // Parámetro 3
+                        psAsiento.setString(1, fila);
+                        psAsiento.setInt(2, numeroSilla);
+                        psAsiento.setInt(3, idZonaGenerada);
                         psAsiento.addBatch();
                     }
                     psAsiento.executeBatch();
@@ -122,7 +119,7 @@ public class RecintoDAOImpl implements RecintoDAO {
 
             }
 
-            conn.commit(); // Si todo salió perfecto, guarda los cambios reales en MySQL
+            conn.commit();
         } catch (SQLException e) {
             if (conn != null) {
                 try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }

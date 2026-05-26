@@ -11,8 +11,6 @@ public class EstadoConfirmada implements EstadoCompraState {
 
     @Override
     public void cancelar(Compra compra) throws Exception {
-        // Si se permite cancelar después de confirmada, debería aplicarse una política de reembolso.
-        // Por simplicidad, se puede lanzar excepción o delegar en otra estrategia.
         throw new Exception("No se puede cancelar una compra confirmada sin pasar por reembolso.");
     }
 
@@ -26,5 +24,4 @@ public class EstadoConfirmada implements EstadoCompraState {
         compra.setEstado(EstadoCompra.REEMBOLSADA);
         compra.setEstadoCompraState(new EstadoReembolsada());
     }
-
 }

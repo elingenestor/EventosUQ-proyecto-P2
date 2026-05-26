@@ -1,3 +1,303 @@
+/* ===== BASE ===== */
 .root {
-    -fx-font-family: "System";
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #0d0d1a;
+}
+
+/* ===== LABELS INFO (Evento, Ciudad, etc.) ===== */
+.label-titulo {
+    -fx-text-fill: #7c7caa;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.label-valor {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* ===== CARDS DE INFO ===== */
+.info-card {
+    -fx-background-color: #1e1e2e;
+    -fx-background-radius: 8;
+    -fx-border-color: #3a3a5c;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+}
+
+/* ===== COMBOBOX ===== */
+.combo-zona {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #3a3a5c;
+    -fx-border-radius: 6;
+    -fx-text-fill: white;
+}
+
+/* ===== TABLAS ===== */
+.tabla-disponibles {
+    -fx-background-color: #12122a;
+    -fx-border-color: #2e2e4e;
+    -fx-border-radius: 8;
+}
+
+.tabla-disponibles .virtual-flow {
+    -fx-background-color: #12122a;
+}
+
+.tabla-disponibles > .virtual-flow > .clipped-container > .sheet > .table-row-cell {
+    -fx-background-color: #12122a;
+    -fx-text-fill: white;
+}
+
+.tabla-disponibles > .virtual-flow > .clipped-container > .sheet > .table-row-cell .text {
+    -fx-fill: white;
+}
+
+.tabla-seleccionados {
+    -fx-background-color: #0d2a1a;
+    -fx-border-color: #1a4a2a;
+    -fx-border-radius: 8;
+    -fx-control-inner-background: #0d2a1a;
+    -fx-control-inner-background-alt: #0f3020;
+}
+
+.tabla-seleccionados .virtual-flow {
+    -fx-background-color: #0d2a1a;
+}
+
+.tabla-seleccionados .clipped-container {
+    -fx-background-color: #0d2a1a;
+}
+
+.tabla-seleccionados > .virtual-flow > .clipped-container > .sheet > .table-row-cell {
+    -fx-background-color: #0d2a1a;
+    -fx-text-fill: white;
+}
+
+.tabla-seleccionados > .virtual-flow > .clipped-container > .sheet > .table-row-cell .text {
+    -fx-fill: white;
+}
+
+.tabla-seleccionados .table-row-cell:selected {
+    -fx-background-color: #1a4a2a;
+}
+
+.tabla-seleccionados .column-header {
+    -fx-background-color: #0a2015;
+}
+
+.tabla-seleccionados .column-header .label {
+    -fx-text-fill: #7b68ee;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.tabla-seleccionados .column-header-background {
+    -fx-background-color: #0a2015;
+}
+
+.table-view .column-header {
+    -fx-background-color: #1a1a3a;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #7b68ee;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+/* ===== BOTÓN AGREGAR ===== */
+.btn-agregar {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8;
+    -fx-padding: 10 0 10 0;
+    -fx-cursor: hand;
+    -fx-pref-width: 400px;
+}
+
+.btn-agregar:hover {
+    -fx-background-color: #7c74ff;
+}
+
+/* ===== BOTÓN QUITAR ===== */
+.btn-quitar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ff6b6b;
+    -fx-border-color: #ff6b6b;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 0 10 0;
+    -fx-cursor: hand;
+    -fx-pref-width: 400px;
+}
+
+/* ===== TOTAL ===== */
+.label-total-titulo {
+    -fx-text-fill: #aaaaaa;
+    -fx-font-size: 11px;
+}
+
+.label-total-valor {
+    -fx-text-fill: #00e676;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* ===== BOTÓN CONTINUAR ===== */
+.btn-continuar {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-background-radius: 20;
+    -fx-padding: 12 24 12 24;
+    -fx-cursor: hand;
+}
+
+.btn-continuar:hover {
+    -fx-background-color: #7c74ff;
+}
+.tabla-seleccionados > .column-header-background > .filler {
+    -fx-background-color: #0a2015;
+}
+
+/* ===== SOLO LINEAS DE FILAS, SIN COLUMNAS ===== */
+.table-view .table-cell {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.table-view .table-row-cell {
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tabla-seleccionados .table-row-cell {
+    -fx-border-color: #1a4a2a;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ===== COLOR LETRAS COMBOBOX ===== */
+.combo-zona .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #1e1e2e;
+}
+.table-view .table-cell {
+    -fx-alignment: CENTER;
+}
+
+.table-view .column-header .label {
+    -fx-alignment: CENTER;
+}
+
+.tabla-seleccionados .table-row-cell:selected {
+    -fx-background-color: #1a4a2a;
+    -fx-text-fill: white;
+}
+
+.tabla-seleccionados .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+/* ===== TABLA CONFIRMAR COMPRA ===== */
+.tabla-confirmar {
+    -fx-background-color: #12122a;
+    -fx-border-color: #2e2e4e;
+    -fx-border-radius: 8;
+    -fx-control-inner-background: #12122a;
+    -fx-control-inner-background-alt: #12122a;
+}
+
+.tabla-confirmar .virtual-flow {
+    -fx-background-color: #12122a;
+}
+
+.tabla-confirmar > .virtual-flow > .clipped-container > .sheet > .table-row-cell {
+    -fx-background-color: #12122a;
+    -fx-text-fill: white;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tabla-confirmar > .virtual-flow > .clipped-container > .sheet > .table-row-cell .text {
+    -fx-fill: white;
+}
+
+.tabla-confirmar .column-header {
+    -fx-background-color: #1a1a3a;
+}
+
+.tabla-confirmar .column-header .label {
+    -fx-text-fill: #7b68ee;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-alignment: CENTER;
+}
+
+.tabla-confirmar .column-header-background {
+    -fx-background-color: #1a1a3a;
+}
+
+.tabla-confirmar > .column-header-background > .filler {
+    -fx-background-color: #1a1a3a;
+}
+
+/* ===== COMBOBOX DESPLEGABLE ===== */
+.combo-box-popup .list-view {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #3a3a5c;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #1e1e2e;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #2e2e4e;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: #6c63ff;
+}
+
+/* ===== LISTVIEW SERVICIOS ===== */
+.list-view {
+    -fx-background-color: #12122a;
+    -fx-border-color: #2e2e4e;
+}
+
+.list-view .list-cell {
+    -fx-background-color: #12122a;
+    -fx-text-fill: white;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #1e1e2e;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+}
+
+/* ===== COMBO GENERAL ===== */
+.combo-box .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #1e1e2e;
+}
+.tabla-confirmar .table-cell {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.tabla-confirmar .table-row-cell {
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 0 0 1 0;
 }

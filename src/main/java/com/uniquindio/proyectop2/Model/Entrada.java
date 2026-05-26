@@ -22,8 +22,6 @@ public class Entrada {
         this.compra = compra;
     }
 
-    //getter y setter
-
     public String getIdEntrada() {
         return idEntrada;
     }

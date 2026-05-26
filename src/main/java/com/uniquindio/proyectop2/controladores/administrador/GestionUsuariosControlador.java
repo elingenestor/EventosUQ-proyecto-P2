@@ -31,7 +31,6 @@ public class GestionUsuariosControlador {
 
     @FXML
     private void initialize() {
-        // Vinculación estricta con los atributos del modelo Usuario
         colId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -67,7 +66,6 @@ public class GestionUsuariosControlador {
             String telefono = txtTelefono.getText() != null ? txtTelefono.getText().trim() : "";
             String password = txtPassword.getText() != null ? txtPassword.getText() : "";
 
-            // 🌟 VALIDACIÓN DE SEGURIDAD ANTES DE ENVIAR A H2
             if (nombre.isBlank() || email.isBlank() || telefono.isBlank() || password.isBlank()) {
                 mostrarError("Todos los campos (Nombre, Email, Teléfono y Contraseña) son obligatorios.");
                 return;
@@ -79,7 +77,7 @@ public class GestionUsuariosControlador {
             usuario.setEmail(email);
             usuario.setTelefono(telefono);
             usuario.setPassword(password);
-            usuario.setAdmin(false); // Por defecto se crean como clientes comunes
+            usuario.setAdmin(false);
 
             if (usuario.getIdUsuario() == null || usuario.getIdUsuario().trim().isEmpty()) {
                 adminService.crearUsuario(usuario);

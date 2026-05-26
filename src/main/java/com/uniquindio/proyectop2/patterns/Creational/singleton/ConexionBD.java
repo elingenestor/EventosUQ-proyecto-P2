@@ -90,7 +90,6 @@ public class ConexionBD {
             }
 
             if (url != null && url.startsWith("jdbc:h2:")) {
-                // 🌟 RUTAS LIMPIAS: El método ejecutarScript ya les pone el "/" internamente
                 ejecutarScript(connection, "database/schema.sql");
 
                 try {

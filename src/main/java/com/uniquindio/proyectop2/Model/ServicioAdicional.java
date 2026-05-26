@@ -21,8 +21,6 @@ public class ServicioAdicional {
         this.tipoServicio = tipoServicio;
     }
 
-    //getter y setter
-
     public TipoServicio getTipoServicio() {
         return tipoServicio;
     }

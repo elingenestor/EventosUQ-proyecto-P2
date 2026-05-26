@@ -20,8 +20,6 @@ public class MetodoPago {
         this.usuario = usiario;
     }
 
-    //getter y setter
-
     public String getIdMetodoPago() {
         return idMetodoPago;
     }

@@ -7,19 +7,15 @@ import com.uniquindio.proyectop2.patterns.Creational.factory.DAOFactory;
 import com.uniquindio.proyectop2.service.impl.EventoServiceImpl;
 import com.uniquindio.proyectop2.service.interfaces.EventoService;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ListaEventosControlador {
@@ -29,57 +25,36 @@ public class ListaEventosControlador {
     @FXML private DatePicker dpDesde;
     @FXML private DatePicker dpHasta;
 
-    @FXML private TableView<Evento> tblEventos;
-    @FXML private TableColumn<Evento, String> colNombre;
-    @FXML private TableColumn<Evento, String> colCategoria;
-    @FXML private TableColumn<Evento, String> colCiudad;
-    @FXML private TableColumn<Evento, LocalDate> colFecha;
-    @FXML private TableColumn<Evento, String> colEstado;
-
-    @FXML private Label lblTituloDetalle;
-    @FXML private Label lblDescripcionDetalle;
-    @FXML private Label lblRecintoDetalle;
-    @FXML private Label lblFechaDetalle;
-    @FXML private Label lblEstadoDetalle;
+    @FXML private GridPane gridEventos;
 
     private final EventoService eventoService = new EventoServiceImpl(
             DAOFactory.crearEventoDAO(),
             DAOFactory.crearAsientoDAO()
     );
 
-    private final ObservableList<Evento> eventos = FXCollections.observableArrayList();
     private Usuario usuario;
 
     @FXML
-    private void initialize() {
+    public void initialize() {
         cmbCategoria.setItems(FXCollections.observableArrayList(CategoriaEvento.values()));
         cmbCategoria.setPromptText("Todas");
 
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colCategoria.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
-                cell.getValue().getCategoria() != null ? cell.getValue().getCategoria().name() : ""
-        ));
-        colCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
-        colFecha.setCellValueFactory(cell -> new javafx.beans.property.SimpleObjectProperty<>(cell.getValue().getFechaHora() != null
-                ? cell.getValue().getFechaHora().toLocalDate()
-                : null));
-        colEstado.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
-                cell.getValue().getEstado() != null ? cell.getValue().getEstado().name() : ""
-        ));
+        txtCiudad.textProperty().addListener((observable, oldValue, newValue) -> refrescarEventos());
+        cmbCategoria.valueProperty().addListener((observable, oldValue, newValue) -> refrescarEventos());
+        dpDesde.valueProperty().addListener((observable, oldValue, newValue) -> refrescarEventos());
+        dpHasta.valueProperty().addListener((observable, oldValue, newValue) -> refrescarEventos());
 
-        tblEventos.setItems(eventos);
-        tblEventos.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionado) -> mostrarDetalle(seleccionado));
-
-        cargarEventos();
+        refrescarEventos();
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+        refrescarEventos();
     }
 
     @FXML
     private void buscarEventos() {
-        cargarEventos();
+        refrescarEventos();
     }
 
     @FXML
@@ -88,77 +63,55 @@ public class ListaEventosControlador {
         cmbCategoria.setValue(null);
         dpDesde.setValue(null);
         dpHasta.setValue(null);
-        cargarEventos();
+        refrescarEventos();
     }
 
     @FXML
     private void refrescarEventos() {
-        cargarEventos();
-    }
-
-    @FXML
-    private void abrirDetalleSeleccionado() {
-        Evento seleccionado = tblEventos.getSelectionModel().getSelectedItem();
-        if (seleccionado == null) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un evento", "Debes elegir un evento de la tabla.");
-            return;
-        }
-
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/eventos/detalle_evento.fxml"));
-            Parent root = loader.load();
-            DetalleEventoControlador controlador = loader.getController();
-            controlador.setUsuario(usuario);
-            controlador.inicializar(seleccionado);
+            if (gridEventos == null) return;
+            gridEventos.getChildren().clear();
 
-            Stage stage = new Stage();
-            stage.setTitle("Detalle del evento");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root, 980, 700));
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir el detalle del evento.");
-        }
-    }
-
-    private void cargarEventos() {
-        try {
-            String ciudad = txtCiudad.getText() == null ? null : txtCiudad.getText().trim();
+            String ciudad = (txtCiudad.getText() != null && !txtCiudad.getText().isBlank()) ? txtCiudad.getText().trim() : null;
             CategoriaEvento categoria = cmbCategoria.getValue();
             LocalDate desde = dpDesde.getValue();
             LocalDate hasta = dpHasta.getValue();
 
-            List<Evento> resultado = eventoService.listarEventosDisponibles(ciudad, categoria, desde, hasta);
-            eventos.setAll(resultado);
+            List<Evento> disponibles = eventoService.listarEventosDisponibles(ciudad, categoria, desde, hasta);
 
-            if (!eventos.isEmpty()) {
-                tblEventos.getSelectionModel().selectFirst();
-            } else {
-                mostrarDetalle(null);
+            if (disponibles == null || disponibles.isEmpty()) {
+                return;
             }
+
+            int columna = 0;
+            int fila = 0;
+
+            for (Evento ev : disponibles) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uniquindio/proyectop2/vistas/fragmentos/tarjeta_evento.fxml"));
+                VBox tarjeta = loader.load();
+
+                TarjetaEventoControlador tarjetaCtrl = loader.getController();
+                if (tarjetaCtrl != null) {
+                    tarjetaCtrl.configurarTarjeta(ev);
+                    tarjetaCtrl.setUsuario(usuario);
+                }
+
+                if (columna == 3) {
+                    columna = 0;
+                    fila++;
+                }
+
+                gridEventos.add(tarjeta, columna, fila);
+                GridPane.setMargin(tarjeta, new Insets(12));
+                columna++;
+            }
+        } catch (IOException fxmlEx) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error FXML", "No se pudo cargar tarjeta_evento.fxml: " + fxmlEx.getMessage());
+            fxmlEx.printStackTrace();
         } catch (Exception e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error al cargar eventos", e.getMessage());
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Problema al renderizar las tarjetas: " + e.getMessage());
+            e.printStackTrace();
         }
-    }
-
-    private void mostrarDetalle(Evento evento) {
-        if (evento == null) {
-            lblTituloDetalle.setText("Selecciona un evento");
-            lblDescripcionDetalle.setText("Aquí aparecerá la información del evento.");
-            lblRecintoDetalle.setText("-");
-            lblFechaDetalle.setText("-");
-            lblEstadoDetalle.setText("-");
-            return;
-        }
-
-        lblTituloDetalle.setText(evento.getNombre());
-        lblDescripcionDetalle.setText(evento.getDescripcion() != null ? evento.getDescripcion() : "");
-        lblRecintoDetalle.setText(evento.getRecinto() != null ? evento.getRecinto().getNombre() : "Sin recinto");
-        lblFechaDetalle.setText(evento.getFechaHora() != null
-                ? evento.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-                : "-");
-        lblEstadoDetalle.setText(evento.getEstado() != null ? evento.getEstado().name() : "-");
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {

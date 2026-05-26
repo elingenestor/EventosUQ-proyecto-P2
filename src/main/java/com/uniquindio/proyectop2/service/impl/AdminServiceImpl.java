@@ -61,6 +61,5 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void generarReportes() {
-        // delegado a ReportService
     }
 }

@@ -36,7 +36,6 @@
                         <Insets top="16" right="16" bottom="16" left="16"/>
                     </padding>
 
-                    <!-- 🌟 CORREGIDO: Envolvemos correctamente los elementos dentro de children -->
                     <GridPane hgap="14" vgap="10">
                         <children>
                             <Label text="Ciudad:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>

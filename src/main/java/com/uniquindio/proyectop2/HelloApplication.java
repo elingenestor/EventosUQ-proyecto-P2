@@ -15,6 +15,11 @@ public class HelloApplication extends Application {
         );
 
         Scene scene = new Scene(fxmlLoader.load(), 980, 620);
+
+        scene.getStylesheets().add(
+                HelloApplication.class.getResource("/estilos/estilos.css").toExternalForm()
+        );
+
         stage.setTitle("Eventos UQ - Iniciar sesión");
         stage.setScene(scene);
         stage.show();

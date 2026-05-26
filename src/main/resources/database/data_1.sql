@@ -165,3 +165,14 @@ SELECT 1, 1 WHERE NOT EXISTS (SELECT 1 FROM compra_servicio WHERE id_compra = 1 
 
 INSERT INTO compra_servicio (id_compra, id_servicio)
 SELECT 1, 2 WHERE NOT EXISTS (SELECT 1 FROM compra_servicio WHERE id_compra = 1 AND id_servicio = 2);
+INSERT INTO servicio_adicional (nombre, descripcion, precio, tipo)
+SELECT 'Acceso VIP', 'Área exclusiva con bebidas y snacks', 50000.00, 'VIP' WHERE NOT EXISTS (SELECT 1 FROM servicio_adicional WHERE nombre = 'Acceso VIP');
+
+INSERT INTO servicio_adicional (nombre, descripcion, precio, tipo)
+SELECT 'Seguro de Cancelación', 'Reembolso total en caso de cancelación', 15000.00, 'SEGURO' WHERE NOT EXISTS (SELECT 1 FROM servicio_adicional WHERE nombre = 'Seguro de Cancelación');
+
+INSERT INTO servicio_adicional (nombre, descripcion, precio, tipo)
+SELECT 'Camiseta Oficial', 'Merchandising del evento', 60000.00, 'MERCHANDISING' WHERE NOT EXISTS (SELECT 1 FROM servicio_adicional WHERE nombre = 'Camiseta Oficial');
+
+INSERT INTO servicio_adicional (nombre, descripcion, precio, tipo)
+SELECT 'Parqueadero', 'Parqueadero preferencial', 20000.00, 'PARQUEADERO' WHERE NOT EXISTS (SELECT 1 FROM servicio_adicional WHERE nombre = 'Parqueadero');
